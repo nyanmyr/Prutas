@@ -44,6 +44,20 @@ void playingScene
 			50.0,
 			50.0
 		},
+		sf::Color::White
+	);
+
+	Entity background = makeObject
+	(
+		Enum::Texture::TEXTURE_PLACEHOLDER,
+		sf::Vector2f(
+			window.getDefaultView().getSize().x / 2.0,
+			window.getDefaultView().getSize().y * 0.75
+		),
+		sf::Vector2f(
+			window.getDefaultView().getSize().x,
+			window.getDefaultView().getSize().y / 2.0
+		),
 		sf::Color::Green
 	);
 

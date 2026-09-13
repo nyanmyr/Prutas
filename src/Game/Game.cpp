@@ -48,7 +48,7 @@ void main()
 	playScene
 	(
 		window,
-		Scene::MENU,
+		Scene::PLAYING,
 		font
 	);
 }

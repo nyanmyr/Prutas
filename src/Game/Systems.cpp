@@ -482,6 +482,29 @@ void Update::drag(const DeltaTime dt)
 			velocityObj.y > 0.1f ? velocityObj.y - (dragObj.y * dt) : 0.0;
 	}
 }
+void Update::doYBounds
+(
+	const double top,
+	const double bottom
+)
+{
+	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
+	auto& velocityArray = systemsNC.getComponentArray<Component::Velocity>();
+
+	for (auto& [entity, pos] : positionArray->getAll())
+	{
+		if (!velocityArray->hasData(entity)) continue;
+
+		Component::Velocity& velocity = velocityArray->getData(entity);
+
+		if (pos.y < top || pos.y > bottom)
+		{
+			velocity.y = -velocity.y / 2.0;
+		}
+
+		pos.y = std::clamp(pos.y, top, bottom);
+	}
+}
 
 // -------------------------------------------------------
 // rendering systems

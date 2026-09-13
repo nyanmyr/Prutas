@@ -10,6 +10,11 @@ void playingScene
 {
 	NacreCoordinator& nc = NacreCoordinator::getInstance();
 
+	const double PLAYER_SIZE = 40.0;
+
+	const double Y_BOUNDS_TOP = window.getDefaultView().getSize().y / 2.0;
+	const double Y_BOUNDS_BOTTOM = window.getDefaultView().getSize().y - (PLAYER_SIZE / 2.0);
+
 	// game state variables
 	sf::Clock clock;
 	std::queue<Entity> renderQueue;
@@ -25,8 +30,8 @@ void playingScene
 			window.getDefaultView().getSize().y / 2.0
 		),
 		{
-			40.0,
-			40.0
+			PLAYER_SIZE,
+			PLAYER_SIZE
 		},
 		{
 			-300.0,
@@ -90,6 +95,11 @@ void playingScene
 		);
 		Update::move(dt);
 		Update::drag(dt);
+		Update::doYBounds
+		(
+			Y_BOUNDS_TOP,
+			Y_BOUNDS_BOTTOM
+		);
 
 		window.clear();
 		// render systems

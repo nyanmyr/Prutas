@@ -39,6 +39,11 @@ namespace Update
 	void doNextScene(sf::RenderWindow& window, sf::Font& font);
 	void move(const DeltaTime dt);
 	void drag(const DeltaTime dt);
+	void doYBounds
+	(
+		const double top,
+		const double bottom
+	);
 }
 
 namespace Render

@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <iostream>
+#include <cmath>
 
 NacreCoordinator& systemsNC = NacreCoordinator::getInstance();
 
@@ -508,8 +509,10 @@ void Update::doYBounds
 	}
 }
 
-const float SIDE_BOUNDARIES = 200.f;
-const float SIDE_MOVE_SPEED = 200.f;
+const double SIDE_MOVE_SPEED = 200.f;
+const double E = 2.1781828f;
+const double SMOOTHNESS_MIDPOINT = 50.0;
+const double SMOOTHNESS_GROWTH = 0.5;
 
 void Update::followCamera
 (
@@ -522,7 +525,7 @@ void Update::followCamera
 	auto& cameraArray = systemsNC.getComponentArray<Component::Camera>();
 
 	if (!systemsNC.getComponentArray<Component::Camera>()->hasData(camera)) return;
-	
+
 	Component::Camera cameraObj = systemsNC.getComponentArray<Component::Camera>()->getData(camera);
 
 	if (cameraObj.target == NULL_ENTITY) return;
@@ -535,22 +538,28 @@ void Update::followCamera
 
 	double moveAmount = 0.f;
 
-	if (targetPos.x < (window.getView().getCenter().x - (window.getView().getSize().x / 2)) + SIDE_BOUNDARIES &&
+	if (targetPos.x < window.getView().getCenter().x &&
 		!(cameraObj.scroll - (SIDE_MOVE_SPEED * dt) < cameraObj.min))
 	{
 		moveAmount = -SIDE_MOVE_SPEED;
 	}
-	else if (targetPos.x > (window.getView().getCenter().x + (window.getView().getSize().x / 2)) - SIDE_BOUNDARIES &&
+	else if (targetPos.x > window.getView().getCenter().x &&
 		!(cameraObj.scroll + (SIDE_MOVE_SPEED * dt) > cameraObj.max))
 	{
 		moveAmount = SIDE_MOVE_SPEED;
 	}
 
+	//std::cout << "distance: " << (targetPos.x - view.getCenter().x) << "\n";
+
+	float smoothness = 1 / (1 + std::pow(E, -SMOOTHNESS_GROWTH * (std::abs(targetPos.x - view.getCenter().x) - SMOOTHNESS_MIDPOINT)));
+
+	//std::cout << "smoothness: " << smoothness << "\n";
+
 	view.move
 	(
 		sf::Vector2f
 		( 
-			moveAmount * dt,
+			(moveAmount * smoothness) * dt,
 			0.0
 		)
 	);

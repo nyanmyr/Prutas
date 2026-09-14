@@ -14,6 +14,12 @@ namespace Enum
 	{
 		TEXTURE_PLACEHOLDER
 	};
+
+	enum Item
+	{
+		NULL_ITEM, // basically means it can't be picked up
+		POTATO_SEED
+	};
 }
 
 #endif

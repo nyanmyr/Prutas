@@ -96,6 +96,29 @@ void playingScene
 		player
 	);
 
+	Entity potatoSeed = makeItem
+	(
+		Enum::Texture::TEXTURE_PLACEHOLDER,
+		sf::Vector2f
+		(
+			0.0,
+			150.0
+		),
+		sf::Vector2f
+		(
+			30.0,
+			30.0
+		),
+		sf::Color
+		(
+			150,
+			100,
+			0
+		),
+		Enum::POTATO_SEED,
+		50.0
+	);
+
 	// onstart systems
 	Start::setText(font); // font system is limited to one font
 	Start::setTextOrigin();

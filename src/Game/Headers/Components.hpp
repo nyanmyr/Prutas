@@ -109,6 +109,17 @@ namespace Component
 		double max = 0.0;
 		Entity target = NULL_ENTITY;
 	};
+
+	struct Inventory
+	{
+		std::vector<Enum::Item> items{};
+	};
+
+	struct Item
+	{
+		Enum::Item type = Enum::Item::NULL_ITEM;
+		double pickupDistance = 0.0;
+	};
 }
 
 #endif

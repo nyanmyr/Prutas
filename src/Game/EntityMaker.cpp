@@ -110,6 +110,12 @@ Entity makePlayer
 		Component::Color{ col }
 	);
 
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Inventory{}
+	);
+
 	return entity;
 }
 
@@ -299,6 +305,87 @@ Entity& makeObject
 	(
 		entity,
 		Component::Color{ col }
+	);
+
+	return entity;
+}
+
+Entity& makeItem
+(
+	Enum::Texture texture,
+	sf::Vector2f pos,
+	sf::Vector2f size,
+	const sf::Color col,
+	const Enum::Item type,
+	const double pickupDistance
+)
+{
+	Entity entity = entityMakerNC.createEntity();
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Position
+		{
+			pos.x,
+			pos.y
+		}
+	);
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Transform
+		{
+			size.x,
+			size.y
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Texture{ texture }
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Sprite{}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::ZIndex
+		{
+			1,
+			true
+		}
+	);
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Origin
+		{
+			size.x / 2.f,
+			size.y / 2.f
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Color{ col }
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Item
+		{
+			type,
+			pickupDistance
+		}
 	);
 
 	return entity;

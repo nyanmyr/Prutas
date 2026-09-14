@@ -35,6 +35,17 @@ Entity& makeObject
 	sf::Vector2f size,
 	const sf::Color col
 );
+
+Entity& makeItem
+(
+	Enum::Texture texture,
+	sf::Vector2f pos,
+	sf::Vector2f size,
+	const sf::Color col,
+	const Enum::Item type,
+	const double pickupDistance
+);
+
 Entity& makeCamera
 (
 	double min,

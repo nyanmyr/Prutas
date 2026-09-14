@@ -517,10 +517,9 @@ void Update::doBounds
 	}
 }
 
-const double SIDE_MOVE_SPEED = 200.f;
-const double E = 2.1781828f;
+const double SIDE_MOVE_SPEED = 200.0;
 const double SMOOTHNESS_MIDPOINT = 50.0;
-const double SMOOTHNESS_GROWTH = 0.5;
+const double SMOOTHNESS_GROWTH = 1.0;
 
 void Update::followCamera
 (
@@ -557,7 +556,7 @@ void Update::followCamera
 
 	//std::cout << "distance: " << (targetPos.x - view.getCenter().x) << "\n";
 
-	float smoothness = 1 / (1 + std::pow(E, -SMOOTHNESS_GROWTH * (std::abs(targetPos.x - view.getCenter().x) - SMOOTHNESS_MIDPOINT)));
+	float smoothness = 1 / (1 + std::exp(-SMOOTHNESS_GROWTH * (std::abs(targetPos.x - view.getCenter().x) - SMOOTHNESS_MIDPOINT)));
 
 	//std::cout << "smoothness: " << smoothness << "\n";
 

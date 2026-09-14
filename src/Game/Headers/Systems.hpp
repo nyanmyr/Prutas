@@ -39,10 +39,12 @@ namespace Update
 	void doNextScene(sf::RenderWindow& window, sf::Font& font);
 	void move(const DeltaTime dt);
 	void drag(const DeltaTime dt);
-	void doYBounds
+	void doBounds
 	(
 		const double top,
-		const double bottom
+		const double bottom,
+		const double left,
+		const double right
 	);
 	void followCamera
 	(

@@ -8,12 +8,32 @@ void playingScene
 	sf::Font& font
 )
 {
+	window.setView
+	(
+		sf::View
+		(
+			sf::Vector2f
+			(
+				0.f,
+				0.f
+			),
+			sf::Vector2f
+			(
+				window.getDefaultView().getSize().x,
+				window.getDefaultView().getSize().y
+			)
+		)
+	);
+
 	NacreCoordinator& nc = NacreCoordinator::getInstance();
 
 	const double PLAYER_SIZE = 40.0;
 
-	const double Y_BOUNDS_TOP = window.getDefaultView().getSize().y / 2.0;
-	const double Y_BOUNDS_BOTTOM = window.getDefaultView().getSize().y - (PLAYER_SIZE / 2.0);
+	const double Y_BOUNDS_TOP = -(PLAYER_SIZE / 2.0);
+	const double Y_BOUNDS_BOTTOM = window.getDefaultView().getSize().y / 2 - (PLAYER_SIZE / 2.0);
+
+	const double X_BOUNDS_LEFT = -500.0;
+	const double X_BOUNDS_RIGHT = 500.0;
 
 	// game state variables
 	sf::Clock clock;
@@ -25,9 +45,10 @@ void playingScene
 	Entity player = makePlayer
 	(
 		Enum::Texture::TEXTURE_PLACEHOLDER,
-		sf::Vector2f(
-			window.getDefaultView().getSize().x / 2.0,
-			window.getDefaultView().getSize().y / 2.0
+		sf::Vector2f
+		(
+			0,
+			0
 		),
 		{
 			PLAYER_SIZE,
@@ -55,11 +76,13 @@ void playingScene
 	Entity background = makeObject
 	(
 		Enum::Texture::TEXTURE_PLACEHOLDER,
-		sf::Vector2f(
-			window.getDefaultView().getSize().x / 2.0,
-			window.getDefaultView().getSize().y * 0.75
+		sf::Vector2f
+		(
+			0.0,
+			150.0
 		),
-		sf::Vector2f(
+		sf::Vector2f
+		(
 			window.getDefaultView().getSize().x,
 			window.getDefaultView().getSize().y / 2.0
 		),
@@ -68,8 +91,8 @@ void playingScene
 
 	Entity camera = makeCamera
 	(
-		-100,
-		window.getDefaultView().getSize().y + 100,
+		X_BOUNDS_LEFT,
+		X_BOUNDS_RIGHT,
 		player
 	);
 
@@ -102,10 +125,12 @@ void playingScene
 		);
 		Update::move(dt);
 		Update::drag(dt);
-		Update::doYBounds
+		Update::doBounds
 		(
 			Y_BOUNDS_TOP,
-			Y_BOUNDS_BOTTOM
+			Y_BOUNDS_BOTTOM,
+			X_BOUNDS_LEFT,
+			X_BOUNDS_RIGHT
 		);
 		Update::followCamera
 		(

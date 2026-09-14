@@ -318,7 +318,6 @@ Entity& makeCamera
 		entity,
 		Component::Camera
 		{
-			0.0,
 			min,
 			max,
 			target

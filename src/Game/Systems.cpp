@@ -485,10 +485,12 @@ void Update::drag(const DeltaTime dt)
 			velocityObj.y > 0.1f ? velocityObj.y - (dragObj.y * dt) : 0.0;
 	}
 }
-void Update::doYBounds
+void Update::doBounds
 (
 	const double top,
-	const double bottom
+	const double bottom,
+	const double left,
+	const double right
 )
 {
 	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
@@ -505,7 +507,13 @@ void Update::doYBounds
 			velocity.y = -velocity.y / 2.0;
 		}
 
+		if (pos.x < left || pos.x > right)
+		{
+			velocity.x = -velocity.x / 2.0;
+		}
+
 		pos.y = std::clamp(pos.y, top, bottom);
+		pos.x = std::clamp(pos.x, left, right);
 	}
 }
 
@@ -538,13 +546,11 @@ void Update::followCamera
 
 	double moveAmount = 0.f;
 
-	if (targetPos.x < window.getView().getCenter().x &&
-		!(cameraObj.scroll - (SIDE_MOVE_SPEED * dt) < cameraObj.min))
+	if (targetPos.x < window.getView().getCenter().x)
 	{
 		moveAmount = -SIDE_MOVE_SPEED;
 	}
-	else if (targetPos.x > window.getView().getCenter().x &&
-		!(cameraObj.scroll + (SIDE_MOVE_SPEED * dt) > cameraObj.max))
+	else if (targetPos.x > window.getView().getCenter().x)
 	{
 		moveAmount = SIDE_MOVE_SPEED;
 	}
@@ -563,7 +569,17 @@ void Update::followCamera
 			0.0
 		)
 	);
-	cameraObj.scroll += (moveAmount * dt);
+
+	//std::cout << "currentDist: " << std::clamp(static_cast<double>(view.getCenter().x), cameraObj.min, cameraObj.max) << "\n";
+
+	view.setCenter
+	(
+		sf::Vector2f
+		(
+			std::clamp(static_cast<double>(view.getCenter().x), cameraObj.min, cameraObj.max),
+			view.getCenter().y
+		)
+	);
 
 	window.setView(view);
 }

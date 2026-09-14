@@ -66,6 +66,13 @@ void playingScene
 		sf::Color::Green
 	);
 
+	Entity camera = makeCamera
+	(
+		-100,
+		window.getDefaultView().getSize().y + 100,
+		player
+	);
+
 	// onstart systems
 	Start::setText(font); // font system is limited to one font
 	Start::setTextOrigin();
@@ -99,6 +106,12 @@ void playingScene
 		(
 			Y_BOUNDS_TOP,
 			Y_BOUNDS_BOTTOM
+		);
+		Update::followCamera
+		(
+			camera,
+			dt,
+			window
 		);
 
 		window.clear();

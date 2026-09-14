@@ -23,6 +23,7 @@ namespace Component {
 	struct Texture;
 	struct TexturesContainer;
 	struct Color;
+	struct Camera;
 }
 
 struct Component::Position
@@ -119,5 +120,12 @@ struct Component::Color
 	sf::Color col = sf::Color(sf::Color::White);
 };
 
+struct Component::Camera
+{
+	double scroll = 0.0;
+	double min = 0.0;
+	double max = 0.0;
+	Entity target = NULL_ENTITY;
+};
 
 #endif

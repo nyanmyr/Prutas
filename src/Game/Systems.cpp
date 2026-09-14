@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <iostream>
+
 NacreCoordinator& systemsNC = NacreCoordinator::getInstance();
 
 // -------------------------------------------------------
@@ -504,6 +506,57 @@ void Update::doYBounds
 
 		pos.y = std::clamp(pos.y, top, bottom);
 	}
+}
+
+const float SIDE_BOUNDARIES = 200.f;
+const float SIDE_MOVE_SPEED = 200.f;
+
+void Update::followCamera
+(
+	Entity camera,
+	DeltaTime dt,
+	sf::RenderWindow& window
+)
+{
+	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
+	auto& cameraArray = systemsNC.getComponentArray<Component::Camera>();
+
+	if (!systemsNC.getComponentArray<Component::Camera>()->hasData(camera)) return;
+	
+	Component::Camera cameraObj = systemsNC.getComponentArray<Component::Camera>()->getData(camera);
+
+	if (cameraObj.target == NULL_ENTITY) return;
+
+	sf::View view = window.getView();
+
+	if (!systemsNC.getComponentArray<Component::Position>()->hasData(cameraObj.target)) return;
+
+	const Component::Position& targetPos = positionArray->getData(cameraObj.target);
+
+	double moveAmount = 0.f;
+
+	if (targetPos.x < (window.getView().getCenter().x - (window.getView().getSize().x / 2)) + SIDE_BOUNDARIES &&
+		!(cameraObj.scroll - (SIDE_MOVE_SPEED * dt) < cameraObj.min))
+	{
+		moveAmount = -SIDE_MOVE_SPEED;
+	}
+	else if (targetPos.x > (window.getView().getCenter().x + (window.getView().getSize().x / 2)) - SIDE_BOUNDARIES &&
+		!(cameraObj.scroll + (SIDE_MOVE_SPEED * dt) > cameraObj.max))
+	{
+		moveAmount = SIDE_MOVE_SPEED;
+	}
+
+	view.move
+	(
+		sf::Vector2f
+		( 
+			moveAmount * dt,
+			0.0
+		)
+	);
+	cameraObj.scroll += (moveAmount * dt);
+
+	window.setView(view);
 }
 
 // -------------------------------------------------------

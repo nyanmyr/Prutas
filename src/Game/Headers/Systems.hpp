@@ -44,6 +44,12 @@ namespace Update
 		const double top,
 		const double bottom
 	);
+	void followCamera
+	(
+		Entity camera,
+		DeltaTime dt,
+		sf::RenderWindow& window
+	);
 }
 
 namespace Render

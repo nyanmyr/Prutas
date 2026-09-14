@@ -303,3 +303,27 @@ Entity& makeObject
 
 	return entity;
 }
+
+Entity& makeCamera
+(
+	double min,
+	double max,
+	Entity target
+)
+{
+	Entity entity = entityMakerNC.createEntity();
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Camera
+		{
+			0.0,
+			min,
+			max,
+			target
+		}
+	);
+
+	return entity;
+}

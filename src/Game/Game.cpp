@@ -38,6 +38,7 @@ void main()
 	nc.registerComponent<Component::Texture>();
 	nc.registerComponent<Component::TexturesContainer>();
 	nc.registerComponent<Component::Color>();
+	nc.registerComponent<Component::Camera>();
 
 	sf::Font font;
 	if (!font.openFromFile(FONT_FILEPATH))

@@ -35,4 +35,10 @@ Entity& makeObject
 	sf::Vector2f size,
 	const sf::Color col
 );
+Entity& makeCamera
+(
+	double min,
+	double max,
+	Entity target
+);
 #endif

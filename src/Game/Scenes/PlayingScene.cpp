@@ -169,6 +169,7 @@ void playingScene
 			dt,
 			window
 		);
+		Update::deleteEntities(dt);
 
 		window.clear();
 		// render systems

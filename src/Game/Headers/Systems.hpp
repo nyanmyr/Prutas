@@ -53,6 +53,7 @@ namespace Update
 		DeltaTime dt,
 		sf::RenderWindow& window
 	);
+	void deleteEntities(DeltaTime dt);
 }
 
 namespace Render

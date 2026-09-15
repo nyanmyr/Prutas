@@ -619,6 +619,27 @@ void Update::followCamera
 	window.setView(view);
 }
 
+void Update::deleteEntities(DeltaTime dt)
+{
+	std::vector<Entity> deleteQueue{};
+
+	for (auto& [entity, deleteObj] : systemsNC.getComponentArray<Component::Delete>()->getAll())
+	{
+		if (deleteObj.timer <= 0.0)
+		{
+			deleteQueue.push_back(entity);
+			continue;
+		}
+
+		deleteObj.timer -= dt;
+	}
+
+	for (Entity entity : deleteQueue)
+	{
+		systemsNC.deleteEntity(entity);
+	}
+}
+
 // -------------------------------------------------------
 // rendering systems
 // -------------------------------------------------------

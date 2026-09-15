@@ -27,6 +27,7 @@ namespace Control
 		const Entity player,
 		const DeltaTime dt
 	);
+	void pickup(const Entity player);
 }
 
 namespace Update

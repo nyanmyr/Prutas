@@ -277,6 +277,39 @@ void Control::doPlayerControl
 
 }
 
+void Control::pickup(const Entity player)
+{
+	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
+	auto& itemArray = systemsNC.getComponentArray<Component::Item>();
+
+	if (!positionArray->hasData(player)) return;
+
+	Component::Position playerPos = positionArray->getData(player);
+
+	for (auto& [entity, item] : itemArray->getAll())
+	{
+		if (!positionArray->hasData(entity)) return;
+
+		Component::Position itemPos = positionArray->getData(entity);
+
+		std::cout << "test" << "\n";
+
+		double distance = [](Component::Position a, Component::Position b)
+			{
+				return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
+			}
+		(playerPos, itemPos);
+
+		//std::cout << "distance: " << distance << "\n";
+		//std::cout << "item.pickupdistance: " << item.pickupDistance << "\n";
+
+		if (distance <= item.pickupDistance)
+		{
+			std::cout << "test" << "\n";
+		}
+	}
+}
+
 // -------------------------------------------------------
 // update systems
 // -------------------------------------------------------

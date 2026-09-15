@@ -138,6 +138,14 @@ void playingScene
 			{
 				window.close();
 			}
+
+			if (const auto& keyReleased = event->getIf<sf::Event::KeyReleased>())
+			{
+				if (keyReleased->scancode == sf::Keyboard::Scancode::Space)
+				{
+					Control::pickup(player);
+				}
+			}
 		}
 
 		// systems

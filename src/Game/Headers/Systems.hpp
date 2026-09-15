@@ -58,6 +58,12 @@ namespace Update
 
 namespace Render
 {
+	void alignZIndexWithYAxis
+	(
+		const double top,
+		const double bottom,
+		Entity player
+	);
 	void doZIndex(std::queue<Entity>& renderQueue);
 	void render
 	(

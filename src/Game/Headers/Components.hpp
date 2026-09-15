@@ -53,7 +53,14 @@ namespace Component
 	struct ZIndex
 	{
 		int index = 0;
+		int yAxisAdd = 0;
 		bool visible = true;
+	};
+
+	struct YAxisAdd
+	{
+		int amount = 0;
+		bool enabled = true;
 	};
 
 	struct Velocity

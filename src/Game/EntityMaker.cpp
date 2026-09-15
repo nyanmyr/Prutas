@@ -41,6 +41,15 @@ Entity makePlayer
 	entityMakerNC.addComponent
 	(
 		entity,
+		Component::YAxisAdd
+		{
+			0,
+			true
+		}
+	);
+	entityMakerNC.addComponent
+	(
+		entity,
 		Component::Origin
 		{
 			size.x / 2.0,
@@ -359,6 +368,15 @@ Entity& makeItem
 		Component::ZIndex
 		{
 			1,
+			true
+		}
+	);
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::YAxisAdd
+		{
+			0,
 			true
 		}
 	);

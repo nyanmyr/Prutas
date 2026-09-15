@@ -173,6 +173,12 @@ void playingScene
 
 		window.clear();
 		// render systems
+		Render::alignZIndexWithYAxis
+		(
+			Y_BOUNDS_TOP,
+			Y_BOUNDS_BOTTOM,
+			player
+		);
 		Render::doZIndex(renderQueue);
 		Render::render
 		(

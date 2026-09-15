@@ -647,14 +647,58 @@ void Update::deleteEntities(DeltaTime dt)
 // -------------------------------------------------------
 // rendering systems
 // -------------------------------------------------------
+void Render::alignZIndexWithYAxis
+(
+	const double top,
+	const double bottom,
+	Entity player
+)
+{
+	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
+	auto& yAxisAddArray = systemsNC.getComponentArray<Component::YAxisAdd>();
+
+	for (const auto& [entity, zIndex] : systemsNC.getComponentArray<Component::ZIndex>()->getAll())
+	{
+		if (!positionArray->hasData(entity) ||
+			!yAxisAddArray->hasData(entity)) continue;
+
+		Component::YAxisAdd& yAxisAdd = yAxisAddArray->getData(entity);
+		const Component::Position pos = positionArray->getData(entity);
+
+		// inverse lerp/ min-max normalization
+		double progressRatio = [](double target, double min, double max)
+			{
+				return (target - min) / (max - min);
+			}
+		(pos.y, top, bottom);
+
+		yAxisAdd.amount = static_cast<int>(progressRatio * (bottom - top));
+
+		//std::cout << "posY: " << pos.y << "\n";
+		//std::cout << "progressRatio: " << progressRatio << "\n";
+		//std::cout << "yAxisAdd: " << zIndex.yAxisAdd << "\n";
+	}
+}
 void Render::doZIndex(std::queue<Entity>& renderQueue)
 {
 	auto& zIndexArray = systemsNC.getComponentArray<Component::ZIndex>();
+	auto& yAxisAddArray = systemsNC.getComponentArray<Component::YAxisAdd>();
 
 	std::vector<std::pair<int, Entity>> renderVector;
 	for (auto& [entity, zIndexObj] : zIndexArray->getAll())
 	{
-		if (zIndexObj.visible) renderVector.emplace_back(zIndexObj.index, entity);
+		if (!zIndexObj.visible) continue;
+
+		int finalIndex = zIndexObj.index;
+
+		if (yAxisAddArray->hasData(entity) &&
+			yAxisAddArray->getData(entity).enabled)
+		{
+			Component::YAxisAdd yAxisAdd = yAxisAddArray->getData(entity);
+			finalIndex += yAxisAdd.amount;
+		}
+
+		renderVector.emplace_back(finalIndex, entity);
 	}
 	std::sort(renderVector.begin(), renderVector.end());
 

@@ -30,6 +30,7 @@ void main()
 	nc.registerComponent<Component::Text>();
 	nc.registerComponent<Component::NextScene>();
 	nc.registerComponent<Component::ZIndex>();
+	nc.registerComponent<Component::YAxisAdd>();
 	nc.registerComponent<Component::Velocity>();
 	nc.registerComponent<Component::Speed>();
 	nc.registerComponent<Component::PlayerController>();

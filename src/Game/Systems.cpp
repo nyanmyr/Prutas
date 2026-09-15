@@ -281,17 +281,20 @@ void Control::pickup(const Entity player)
 {
 	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
 	auto& itemArray = systemsNC.getComponentArray<Component::Item>();
+	auto& inventoryArray = systemsNC.getComponentArray<Component::Inventory>();
 
-	if (!positionArray->hasData(player)) return;
+	if (!positionArray->hasData(player) ||
+		!inventoryArray->hasData(player)) return;
 
-	Component::Position playerPos = positionArray->getData(player);
+	const Component::Position playerPos = positionArray->getData(player);
+	Component::Inventory& playerInventory = inventoryArray->getData(player);
 
 	for (auto& [entity, item] : itemArray->getAll())
 	{
 		if (!positionArray->hasData(entity) ||
 			systemsNC.getComponentArray<Component::Delete>()->hasData(entity)) continue;
 
-		Component::Position itemPos = positionArray->getData(entity);
+		const Component::Position itemPos = positionArray->getData(entity);
 
 		double distance = [](Component::Position a, Component::Position b)
 			{
@@ -304,6 +307,7 @@ void Control::pickup(const Entity player)
 
 		if (distance <= item.pickupDistance)
 		{
+			playerInventory.items.push_back(item.type);
 			systemsNC.addComponent
 			(
 				entity,

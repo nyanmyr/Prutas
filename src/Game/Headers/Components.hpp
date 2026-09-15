@@ -120,6 +120,11 @@ namespace Component
 		Enum::Item type = Enum::Item::NULL_ITEM;
 		double pickupDistance = 0.0;
 	};
+
+	struct Delete
+	{
+		double timer = 0.0;
+	};
 }
 
 #endif

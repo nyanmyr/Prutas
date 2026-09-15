@@ -288,11 +288,10 @@ void Control::pickup(const Entity player)
 
 	for (auto& [entity, item] : itemArray->getAll())
 	{
-		if (!positionArray->hasData(entity)) return;
+		if (!positionArray->hasData(entity) ||
+			systemsNC.getComponentArray<Component::Delete>()->hasData(entity)) continue;
 
 		Component::Position itemPos = positionArray->getData(entity);
-
-		std::cout << "test" << "\n";
 
 		double distance = [](Component::Position a, Component::Position b)
 			{
@@ -305,7 +304,11 @@ void Control::pickup(const Entity player)
 
 		if (distance <= item.pickupDistance)
 		{
-			std::cout << "test" << "\n";
+			systemsNC.addComponent
+			(
+				entity,
+				Component::Delete{0.0}
+			);
 		}
 	}
 }

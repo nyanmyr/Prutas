@@ -41,6 +41,7 @@ void main()
 	nc.registerComponent<Component::Camera>();
 	nc.registerComponent<Component::Inventory>();
 	nc.registerComponent<Component::Item>();
+	nc.registerComponent<Component::Delete>();
 
 	sf::Font font;
 	if (!font.openFromFile(FONT_FILEPATH))

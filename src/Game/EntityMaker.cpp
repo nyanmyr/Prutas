@@ -1,5 +1,9 @@
 #include <SFML/Graphics.hpp>
+#include <unordered_map>
+#include <iostream>
+
 #include "../Engine/NacreCoordinator.hpp"
+
 #include "Headers/EntityMaker.hpp"
 #include "Headers/Components.hpp"
 #include "Headers/Enums.hpp"
@@ -426,6 +430,120 @@ Entity& makeCamera
 			min,
 			max,
 			target
+		}
+	);
+
+	return entity;
+}
+
+Entity& makeForageSpot
+(
+	const Enum::Texture texture,
+	const sf::Vector2f pos,
+	const sf::Vector2f size,
+	const sf::Color col,
+	const double forageDistance,
+	// pass in int values because this func also handles conversion of those values to probability percentages
+	const std::unordered_map<Enum::Item, int>& itemTable
+)
+{
+	Entity entity = entityMakerNC.createEntity();
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Position
+		{
+			pos.x,
+			pos.y
+		}
+	);
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Transform
+		{
+			size.x,
+			size.y
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Texture{ texture }
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Sprite{}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::ZIndex
+		{
+			1,
+			true
+		}
+	);
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::YAxisAdd
+		{
+			0,
+			true
+		}
+	);
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Origin
+		{
+			size.x / 2.f,
+			size.y / 2.f
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Color{ col }
+	);
+
+	int max = 0;
+
+	for (const auto& [item, num] : itemTable)
+	{
+		max += num;
+	}
+	
+	std::cout << "max: " << max << "\n";
+
+	std::unordered_map<Enum::Item, double> normalizedItemTable{};
+	normalizedItemTable.reserve(itemTable.size());
+
+	if (max <= 0) throw std::runtime_error("Max is equal or less than 0");
+
+	for (const auto& [item, num] : itemTable)
+	{
+		normalizedItemTable[item] = [](double target, double min, double max) -> double
+			{
+				return (target - min) / (max - min);
+			}
+		(num, 0, max);
+	}
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::ForageSpot
+		{
+			forageDistance,
+			std::move(normalizedItemTable)
 		}
 	);
 

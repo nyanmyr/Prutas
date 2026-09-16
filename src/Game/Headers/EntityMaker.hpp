@@ -52,4 +52,15 @@ Entity& makeCamera
 	double max,
 	Entity target
 );
+
+Entity& makeForageSpot
+(
+	const Enum::Texture texture,
+	const sf::Vector2f pos,
+	const sf::Vector2f size,
+	const sf::Color col,
+	const double forageDistance,
+	// pass in int values because this func also handles conversion of those values to probability percentages
+	const std::unordered_map<Enum::Item, int>& itemTable
+);
 #endif

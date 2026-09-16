@@ -18,7 +18,12 @@ namespace Enum
 	enum Item
 	{
 		NULL_ITEM, // basically means it can't be picked up
-		POTATO_SEED
+		POTATO_SEED,
+		WHEAT_SEED,
+		BARLEY_SEED,
+		CARROT_SEED,
+		CORN_SEED,
+		SUNFLOWER_SEED
 	};
 }
 

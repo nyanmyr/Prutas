@@ -119,6 +119,39 @@ void playingScene
 		50.0
 	);
 
+	const std::unordered_map<Enum::Item, int> forageSpot1ItemTable
+	{
+		{Enum::POTATO_SEED, 3},
+		{Enum::WHEAT_SEED, 4},
+		{Enum::BARLEY_SEED, 4},
+		{Enum::CARROT_SEED, 2},
+		{Enum::CORN_SEED, 1},
+		{Enum::SUNFLOWER_SEED, 2},
+	};
+
+	Entity forageSpot1 = makeForageSpot
+	(
+		Enum::Texture::TEXTURE_PLACEHOLDER,
+		sf::Vector2f
+		(
+			0.0,
+			150.0
+		),
+		sf::Vector2f
+		(
+			30.0,
+			30.0
+		),
+		sf::Color
+		(
+			150,
+			100,
+			0
+		),
+		50.0,
+		forageSpot1ItemTable
+	);
+
 	// onstart systems
 	Start::setText(font); // font system is limited to one font
 	Start::setTextOrigin();

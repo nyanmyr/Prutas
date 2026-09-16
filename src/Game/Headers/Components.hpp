@@ -2,10 +2,13 @@
 #define COMPONENTS_HPP
 
 #include <SFML/Graphics.hpp>
+
 #include "Scenes.hpp"
 #include "Enums.hpp"
+
 #include <optional>
 #include <string>
+#include <unordered_map>
 
 namespace Component
 {
@@ -126,6 +129,14 @@ namespace Component
 	{
 		Enum::Item type = Enum::Item::NULL_ITEM;
 		double pickupDistance = 0.0;
+	};
+
+	struct ForageSpot
+	{
+		double forageDistance = 0.0;
+		// key: item type, value: probabily percentage
+		// all doubles must add up to 1.0
+		std::unordered_map<Enum::Item, double> itemTable{};
 	};
 
 	struct Delete

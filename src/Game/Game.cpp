@@ -42,6 +42,7 @@ void main()
 	nc.registerComponent<Component::Camera>();
 	nc.registerComponent<Component::Inventory>();
 	nc.registerComponent<Component::Item>();
+	nc.registerComponent<Component::ForageSpot>();
 	nc.registerComponent<Component::Delete>();
 
 	sf::Font font;

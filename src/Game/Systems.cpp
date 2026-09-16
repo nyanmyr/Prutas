@@ -664,13 +664,14 @@ void Render::alignZIndexWithYAxis
 
 		Component::YAxisAdd& yAxisAdd = yAxisAddArray->getData(entity);
 		const Component::Position pos = positionArray->getData(entity);
+		const Component::Transform trans = systemsNC.getComponentArray<Component::Transform>()->getData(entity);
 
 		// inverse lerp/ min-max normalization
 		double progressRatio = [](double target, double min, double max)
 			{
 				return (target - min) / (max - min);
 			}
-		(pos.y, top, bottom);
+		(pos.y + (trans.height / 2.0), top, bottom);
 
 		yAxisAdd.amount = static_cast<int>(progressRatio * (bottom - top));
 

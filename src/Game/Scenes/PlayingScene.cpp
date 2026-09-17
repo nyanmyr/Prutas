@@ -134,7 +134,7 @@ void playingScene
 		Enum::Texture::TEXTURE_PLACEHOLDER,
 		sf::Vector2f
 		(
-			0.0,
+			150.0,
 			150.0
 		),
 		sf::Vector2f
@@ -144,7 +144,7 @@ void playingScene
 		),
 		sf::Color
 		(
-			150,
+			200,
 			100,
 			0
 		),
@@ -177,7 +177,7 @@ void playingScene
 				if (keyReleased->scancode == sf::Keyboard::Scancode::Space)
 				{
 					Control::pickup(player);
-					
+					Control::forage(player);
 				}
 			}
 		}

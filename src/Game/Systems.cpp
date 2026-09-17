@@ -4,6 +4,9 @@
 
 #include <iostream>
 #include <cmath>
+#include <random>
+#include <ctime>
+#include <vector>
 
 NacreCoordinator& systemsNC = NacreCoordinator::getInstance();
 
@@ -313,6 +316,59 @@ void Control::pickup(const Entity player)
 				entity,
 				Component::Delete{0.0}
 			);
+		}
+	}
+}
+void Control::forage(const Entity player)
+{
+	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
+	auto& forageSpotArray = systemsNC.getComponentArray<Component::ForageSpot>();
+	auto& inventoryArray = systemsNC.getComponentArray<Component::Inventory>();
+
+	if (!positionArray->hasData(player) ||
+		!inventoryArray->hasData(player)) return;
+
+	const Component::Position playerPos = positionArray->getData(player);
+	Component::Inventory& playerInventory = inventoryArray->getData(player);
+
+	for (auto& [entity, forageSpot] : forageSpotArray->getAll())
+	{
+		if (!positionArray->hasData(entity) ||
+			systemsNC.getComponentArray<Component::Delete>()->hasData(entity)) continue;
+
+		const Component::Position itemPos = positionArray->getData(entity);
+
+		double distance = [](Component::Position a, Component::Position b)
+			{
+				return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
+			}
+		(playerPos, itemPos);
+
+		//std::cout << "distance: " << distance << "\n";
+		//std::cout << "item.pickupdistance: " << item.pickupDistance << "\n";
+
+		if (distance <= forageSpot.forageDistance)
+		{
+			// this part is probably very resource heavy
+			std::vector<Enum::Item> items{};
+			std::vector<int> weights{};
+
+			for (const auto& [key, value] : forageSpot.itemTable)
+			{
+				items.push_back(key);
+				weights.push_back(value);
+			}
+
+			unsigned int seed = static_cast<unsigned int>(std::time(nullptr));
+			std::mt19937 generator(seed);
+
+			std::discrete_distribution<int> distrib(weights.begin(), weights.end());
+
+			int randomWeight = distrib(generator);
+			Enum::Item randomItem = items[randomWeight];
+
+			playerInventory.items.push_back(randomItem);
+			std::cout << "test: " << randomItem << "\n";
 		}
 	}
 }

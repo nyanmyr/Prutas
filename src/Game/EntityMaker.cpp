@@ -256,9 +256,9 @@ Entity makeLoadedTexturesContainer()
 
 Entity& makeObject
 (
-	Enum::Texture texture,
-	sf::Vector2f pos,
-	sf::Vector2f size,
+	const Enum::Texture texture,
+	const sf::Vector2f pos,
+	const sf::Vector2f size,
 	const sf::Color col
 )
 {
@@ -325,9 +325,9 @@ Entity& makeObject
 
 Entity& makeItem
 (
-	Enum::Texture texture,
-	sf::Vector2f pos,
-	sf::Vector2f size,
+	const Enum::Texture texture,
+	const sf::Vector2f pos,
+	const sf::Vector2f size,
 	const sf::Color col,
 	const Enum::Item type,
 	const double pickupDistance
@@ -415,9 +415,9 @@ Entity& makeItem
 
 Entity& makeCamera
 (
-	double min,
-	double max,
-	Entity target
+	const double min,
+	const double max,
+	const Entity target
 )
 {
 	Entity entity = entityMakerNC.createEntity();

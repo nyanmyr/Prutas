@@ -443,7 +443,6 @@ Entity& makeForageSpot
 	const sf::Vector2f size,
 	const sf::Color col,
 	const double forageDistance,
-	// pass in int values because this func also handles conversion of those values to probability percentages
 	const std::unordered_map<Enum::Item, int>& itemTable
 )
 {
@@ -520,22 +519,6 @@ Entity& makeForageSpot
 	{
 		max += num;
 	}
-	
-	std::cout << "max: " << max << "\n";
-
-	std::unordered_map<Enum::Item, double> normalizedItemTable{};
-	normalizedItemTable.reserve(itemTable.size());
-
-	if (max <= 0) throw std::runtime_error("Max is equal or less than 0");
-
-	for (const auto& [item, num] : itemTable)
-	{
-		normalizedItemTable[item] = [](double target, double min, double max) -> double
-			{
-				return (target - min) / (max - min);
-			}
-		(num, 0, max);
-	}
 
 	entityMakerNC.addComponent
 	(
@@ -543,7 +526,7 @@ Entity& makeForageSpot
 		Component::ForageSpot
 		{
 			forageDistance,
-			std::move(normalizedItemTable)
+			std::move(itemTable)
 		}
 	);
 

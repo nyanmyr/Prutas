@@ -177,6 +177,7 @@ void playingScene
 				if (keyReleased->scancode == sf::Keyboard::Scancode::Space)
 				{
 					Control::pickup(player);
+					
 				}
 			}
 		}

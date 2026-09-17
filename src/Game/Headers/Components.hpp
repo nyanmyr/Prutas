@@ -134,9 +134,8 @@ namespace Component
 	struct ForageSpot
 	{
 		double forageDistance = 0.0;
-		// key: item type, value: probabily percentage
-		// all doubles must add up to 1.0
-		std::unordered_map<Enum::Item, double> itemTable{};
+		// key: item type, value: probability weight
+		std::unordered_map<Enum::Item, int> itemTable{};
 	};
 
 	struct Delete

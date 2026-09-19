@@ -62,4 +62,16 @@ Entity& makeForageSpot
 	const double forageDistance,
 	const std::unordered_map<Enum::Item, int>& itemTable
 );
+
+// passing an vector argument with unequal sizes will throw an error
+// while passing vector arguments with exceeding sizes, the exceeding elements will be ignored
+Entity& makePlant
+(
+	const sf::Vector2f pos,
+	const std::vector<double> plantTimes,
+	const std::vector<sf::Color> plantColors,
+	const std::vector<sf::Vector2f> plantSizes,
+	const std::vector<Enum::Texture> plantTextures
+);
+
 #endif

@@ -682,6 +682,149 @@ void Update::followCamera
 	window.setView(view);
 }
 
+void Update::grow
+(
+	const Entity loadedTextures,
+	const DeltaTime dt
+)
+{
+	auto& plantTimesArray = systemsNC.getComponentArray<Component::PlantTimes>();
+	auto& plantSizesArray = systemsNC.getComponentArray<Component::PlantSizes>();
+	auto& plantTexturesArray = systemsNC.getComponentArray<Component::PlantTextures>();
+	auto& plantColorsArray = systemsNC.getComponentArray<Component::PlantColors>();
+
+	auto& textureArray = systemsNC.getComponentArray<Component::Texture>();
+	auto& spriteArray = systemsNC.getComponentArray<Component::Sprite>();
+	auto& transformArray = systemsNC.getComponentArray<Component::Transform>();
+	auto& colorArray = systemsNC.getComponentArray<Component::Color>();
+	auto& originArray = systemsNC.getComponentArray<Component::Origin>();
+	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
+
+	auto& texturesContainerArray = systemsNC.getComponentArray<Component::TexturesContainer>();
+
+	if (!texturesContainerArray->hasData(loadedTextures))
+	{
+		return;
+	}
+
+	Component::TexturesContainer& containerObj = texturesContainerArray->getData(loadedTextures);
+
+	for (auto& [entity, plantTimes] : plantTimesArray->getAll())
+	{
+		if (!plantSizesArray->hasData(entity) ||
+			!plantTexturesArray->hasData(entity) ||
+			!plantColorsArray->hasData(entity) ||
+			!textureArray->hasData(entity) ||
+			!spriteArray->hasData(entity) ||
+			!transformArray->hasData(entity) ||
+			!colorArray->hasData(entity) ||
+			!originArray->hasData(entity) ||
+			!positionArray->hasData(entity)) continue;
+
+		Component::PlantSizes& plantSizes = plantSizesArray->getData(entity);
+		Component::PlantTextures& plantTextures = plantTexturesArray->getData(entity);
+		Component::PlantColors& plantColors = plantColorsArray->getData(entity);
+
+		Component::Texture& texture = textureArray->getData(entity);
+		Component::Sprite& sprite = spriteArray->getData(entity);
+		Component::Transform& transform = transformArray->getData(entity);
+		Component::Color& color = colorArray->getData(entity);
+		Component::Origin& origin = originArray->getData(entity);
+		Component::Position& position = positionArray->getData(entity);
+
+		bool grew = false;
+		double growthMoveY = 0.0;
+
+		if (plantTimes.seed > 0)
+		{
+			if (plantTimes.seed - dt <= 0)
+			{
+				texture.data = plantTextures.seedling;
+
+				growthMoveY = transform.height / 2.0;
+
+				transform.width = plantSizes.seedlingX;
+				transform.height = plantSizes.seedlingY;
+
+				color.col = plantColors.seedling;
+
+				grew = true;
+				//std::cout << "Plant #" << static_cast<int>(entity) << " has grown to seedling stage." << "\n";
+			}
+
+			plantTimes.seed -= dt;
+		}
+		else if (plantTimes.seedling > 0)
+		{
+			if (plantTimes.seedling - dt <= 0)
+			{
+				texture.data = plantTextures.flowering;
+
+				growthMoveY = transform.height / 2.0;
+
+				transform.width = plantSizes.floweringX;
+				transform.height = plantSizes.floweringY;
+
+				color.col = plantColors.flowering;
+
+				grew = true;
+				//std::cout << "Plant #" << static_cast<int>(entity) << " has grown to flowering stage." << "\n";
+			}
+
+			plantTimes.seedling -= dt;
+		}
+		else if (plantTimes.flowering > 0)
+		{
+			if (plantTimes.flowering - dt <= 0)
+			{
+				texture.data = plantTextures.mature;
+
+				growthMoveY = transform.height / 2.0;
+
+				transform.width = plantSizes.matureX;
+				transform.height = plantSizes.matureY;
+
+				color.col = plantColors.mature;
+
+				grew = true;
+				//std::cout << "Plant #" << static_cast<int>(entity) << " has grown to mature stage." << "\n";
+			}
+
+			plantTimes.flowering -= dt;
+		}
+
+		if (grew)
+		{
+			sprite.body.emplace(containerObj.map[texture.data]);
+
+			position.y -= growthMoveY;
+
+			sprite.body->setScale
+			(
+				sf::Vector2f
+				(
+					transform.width / sprite.body->getGlobalBounds().size.x,
+					transform.height / sprite.body->getGlobalBounds().size.y
+				)
+			);
+
+			origin.offsetX = transform.width / 2.0;
+			origin.offsetY = transform.height / 2.0;
+
+			sprite.body->setOrigin
+			(
+				sf::Vector2f
+				(
+					origin.offsetX / sprite.body->getScale().x,
+					origin.offsetY / sprite.body->getScale().y
+				)
+			);
+
+			sprite.body->setColor(color.col);
+		}
+	}
+}
+
 void Update::deleteEntities(DeltaTime dt)
 {
 	std::vector<Entity> deleteQueue{};

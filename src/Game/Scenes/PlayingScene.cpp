@@ -149,6 +149,38 @@ void playingScene
 		}
 	);
 
+	Entity potatoPlant = makePlant
+	(
+		sf::Vector2f
+		(
+			150.0,
+			100.0
+		),
+		{ // plantTimes
+			5.0,
+			5.0,
+			5.0
+		},
+		{ // plantColors
+			sf::Color(51, 43, 6),
+			sf::Color(77, 43, 6),
+			sf::Color(171, 43, 6),
+			sf::Color(234, 43, 6),
+		},
+		{ // plantSizes
+			sf::Vector2f(5.0, 5.0),
+			sf::Vector2f(10.0, 10.0),
+			sf::Vector2f(20.0, 20.0),
+			sf::Vector2f(30.0, 30.0)
+		},
+		{ // plantTextures
+			Enum::Texture::TEXTURE_PLACEHOLDER,
+			Enum::Texture::TEXTURE_PLACEHOLDER,
+			Enum::Texture::TEXTURE_PLACEHOLDER,
+			Enum::Texture::TEXTURE_PLACEHOLDER,
+		}
+	);
+
 	// onstart systems
 	Start::setText(font); // font system is limited to one font
 	Start::setTextOrigin();
@@ -199,6 +231,11 @@ void playingScene
 			camera,
 			dt,
 			window
+		);
+		Update::grow
+		(
+			loadedTextures,
+			dt
 		);
 		Update::deleteEntities(dt);
 

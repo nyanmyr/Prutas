@@ -43,6 +43,10 @@ void main()
 	nc.registerComponent<Component::Inventory>();
 	nc.registerComponent<Component::Item>();
 	nc.registerComponent<Component::ForageSpot>();
+	nc.registerComponent<Component::PlantTimes>();
+	nc.registerComponent<Component::PlantSizes>();
+	nc.registerComponent<Component::PlantTextures>();
+	nc.registerComponent<Component::PlantColors>();
 	nc.registerComponent<Component::Delete>();
 
 	sf::Font font;

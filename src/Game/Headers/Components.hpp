@@ -138,6 +138,44 @@ namespace Component
 		std::vector<int> probabilityWeights{};
 	};
 
+	struct PlantTimes
+	{
+		double seed = 0.0;
+		double seedling = 0.0;
+		double flowering = 0.0;
+	};
+
+	struct PlantSizes
+	{
+		double seedX = 0.0;
+		double seedY = 0.0;
+
+		double seedlingX = 0.0;
+		double seedlingY = 0.0;
+
+		double floweringX = 0.0;
+		double floweringY = 0.0;
+
+		double matureX = 0.0;
+		double matureY = 0.0;
+	};
+
+	struct PlantTextures
+	{
+		Enum::Texture seed;
+		Enum::Texture seedling;
+		Enum::Texture flowering;
+		Enum::Texture mature;
+	};
+
+	struct PlantColors
+	{
+		sf::Color seed = sf::Color::White;
+		sf::Color seedling = sf::Color::White;
+		sf::Color flowering = sf::Color::White;
+		sf::Color mature = sf::Color::White;
+	};
+
 	struct Delete
 	{
 		double timer = 0.0;

@@ -54,6 +54,11 @@ namespace Update
 		DeltaTime dt,
 		sf::RenderWindow& window
 	);
+	void grow
+	(
+		const Entity loadedTextures,
+		const DeltaTime dt
+	);
 	void deleteEntities(DeltaTime dt);
 }
 

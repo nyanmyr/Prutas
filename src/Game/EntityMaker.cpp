@@ -542,3 +542,143 @@ Entity& makeForageSpot
 
 	return entity;
 }
+
+Entity& makePlant
+(
+	const sf::Vector2f pos,
+	const std::vector<double> plantTimes,
+	const std::vector<sf::Color> plantColors,
+	const std::vector<sf::Vector2f> plantSizes,
+	const std::vector<Enum::Texture> plantTextures
+)
+{
+	// 4 corresponds to the plant stages
+	if ((plantTimes.size() < 3 || plantTimes.size() > 3) ||
+		(plantColors.size() < 4 || plantColors.size() > 4) ||
+		(plantSizes.size() < 4 || plantSizes.size() > 4) ||
+		(plantTextures.size() < 4 || plantTextures.size() > 4))
+		throw std::runtime_error("Error: Unequal sized vectors.");
+
+	Entity entity = entityMakerNC.createEntity();
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Position
+		{
+			pos.x,
+			pos.y
+		}
+	);
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Transform
+		{
+			plantSizes[0].x,
+			plantSizes[0].y
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Texture{ plantTextures[0] }
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Sprite{}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::ZIndex
+		{
+			1,
+			true
+		}
+	);
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::YAxisAdd
+		{
+			0,
+			true
+		}
+	);
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Origin
+		{
+			plantSizes[0].x / 2.f,
+			plantSizes[0].y / 2.f
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Color{ plantColors[0] }
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::PlantTimes
+		{
+			plantTimes[0],
+			plantTimes[1],
+			plantTimes[2]
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::PlantSizes
+		{
+			plantSizes[0].x,
+			plantSizes[0].y,
+
+			plantSizes[1].x,
+			plantSizes[1].y,
+
+			plantSizes[2].x,
+			plantSizes[2].y,
+
+			plantSizes[3].x,
+			plantSizes[3].y
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::PlantTextures
+		{
+			plantTextures[0],
+			plantTextures[1],
+			plantTextures[2],
+			plantTextures[3]
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::PlantColors
+		{
+			plantColors[0],
+			plantColors[1],
+			plantColors[2],
+			plantColors[3]
+		}
+	);
+
+	return entity;
+}

@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include <iostream>
+#include <utility>
 
 #include "../Engine/NacreCoordinator.hpp"
 
@@ -513,13 +514,6 @@ Entity makeForageSpot
 		Component::Color{ col }
 	);
 
-	int max = 0;
-
-	for (const auto& [item, num] : itemTable)
-	{
-		max += num;
-	}
-
 	std::vector<Enum::Item> items{};
 	std::vector<int> probabilityWeights{};
 
@@ -549,7 +543,9 @@ Entity makePlant
 	const std::vector<double> plantTimes,
 	const std::vector<sf::Color> plantColors,
 	const std::vector<sf::Vector2f> plantSizes,
-	const std::vector<Enum::Texture> plantTextures
+	const std::vector<Enum::Texture> plantTextures,
+	const std::unordered_map<Enum::Item, sf::Vector2i>& dropTable,
+	const double harvestDistance
 )
 {
 	// 4 corresponds to the plant stages
@@ -677,6 +673,29 @@ Entity makePlant
 			plantColors[1],
 			plantColors[2],
 			plantColors[3]
+		}
+	);
+
+	std::vector<Enum::Item> items{};
+	std::vector<sf::Vector2i> amounts{};
+
+	for (auto& [item, amount] : dropTable)
+	{
+		if (amount.x > amount.y)
+			throw std::runtime_error("Error: min drop amount is greater than max drop amount.");
+
+		items.push_back(item);
+		amounts.push_back(amount);
+	}
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::PlantHarvest
+		{
+			harvestDistance,
+			std::move(items),
+			std::move(amounts)
 		}
 	);
 

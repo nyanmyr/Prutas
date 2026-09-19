@@ -29,6 +29,7 @@ namespace Control
 	);
 	void pickup(const Entity player);
 	void forage(const Entity player);
+	void harvest(const Entity player);
 }
 
 namespace Update

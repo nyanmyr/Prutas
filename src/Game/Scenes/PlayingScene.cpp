@@ -115,7 +115,7 @@ void playingScene
 			100,
 			0
 		),
-		Enum::POTATO_SEED,
+		Enum::POTATO,
 		50.0
 	);
 
@@ -140,10 +140,10 @@ void playingScene
 		),
 		50.0,
 		{
-			{Enum::POTATO_SEED, 3},
+			{Enum::POTATO, 3},
 			{Enum::WHEAT_SEED, 4},
 			{Enum::BARLEY_SEED, 4},
-			{Enum::CARROT_SEED, 2},
+			{Enum::CARROT, 2},
 			{Enum::CORN_SEED, 1},
 			{Enum::SUNFLOWER_SEED, 2},
 		}
@@ -178,7 +178,14 @@ void playingScene
 			Enum::Texture::TEXTURE_PLACEHOLDER,
 			Enum::Texture::TEXTURE_PLACEHOLDER,
 			Enum::Texture::TEXTURE_PLACEHOLDER,
-		}
+		},
+		{
+			{
+				Enum::POTATO,
+				{1, 2}
+			}
+		},
+		50.0
 	);
 
 	// onstart systems
@@ -207,6 +214,7 @@ void playingScene
 				{
 					Control::pickup(player);
 					Control::forage(player);
+					Control::harvest(player);
 				}
 			}
 		}

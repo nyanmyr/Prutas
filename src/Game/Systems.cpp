@@ -308,10 +308,8 @@ void Control::pickup(const Entity player)
 		//std::cout << "distance: " << distance << "\n";
 		//std::cout << "item.pickupdistance: " << item.pickupDistance << "\n";
 
-		if (distance > item.pickupDistance)
-		{
-			continue;
-		}
+		if (distance > item.pickupDistance) continue;
+		
 
 		playerInventory.items.push_back(item.type);
 		systemsNC.addComponent
@@ -349,10 +347,8 @@ void Control::forage(const Entity player)
 		//std::cout << "distance: " << distance << "\n";
 		//std::cout << "item.pickupdistance: " << item.pickupDistance << "\n";
 
-		if (distance > forageSpot.forageDistance)
-		{
-			continue;
-		}
+		if (distance > forageSpot.forageDistance) continue;
+		
 
 		auto now = std::chrono::steady_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch());
@@ -373,6 +369,78 @@ void Control::forage(const Entity player)
 
 		playerInventory.items.push_back(randomItem);
 		std::cout << "test: " << randomItem << "\n";
+	}
+}
+void Control::harvest(const Entity player)
+{
+	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
+	auto& plantHarvestArray = systemsNC.getComponentArray<Component::PlantHarvest>();
+	auto& plantTimesArray = systemsNC.getComponentArray<Component::PlantTimes>();
+	auto& inventoryArray = systemsNC.getComponentArray<Component::Inventory>();
+
+	if (!positionArray->hasData(player) ||
+		!inventoryArray->hasData(player)) return;
+
+	const Component::Position playerPos = positionArray->getData(player);
+	Component::Inventory& playerInventory = inventoryArray->getData(player);
+
+	for (auto& [entity, plantHarvest] : plantHarvestArray->getAll())
+	{
+		if (!positionArray->hasData(entity) ||
+			!plantTimesArray->hasData(entity) ||
+			systemsNC.getComponentArray<Component::Delete>()->hasData(entity)) continue;
+
+		const Component::Position& itemPos = positionArray->getData(entity);
+		const Component::PlantTimes& plantTimes = plantTimesArray->getData(entity);
+
+		if (plantTimes.seed > 0.0 ||
+			plantTimes.seedling > 0.0 ||
+			plantTimes.flowering > 0.0) continue;
+
+		double distance = [](Component::Position a, Component::Position b)
+			{
+				return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
+			}
+		(playerPos, itemPos);
+
+		//std::cout << "distance: " << distance << "\n";
+		//std::cout << "item.pickupdistance: " << item.pickupDistance << "\n";
+
+		if (distance > plantHarvest.harvestDistance) continue;
+
+		auto now = std::chrono::steady_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch());
+
+		uint64_t ms_unsigned = static_cast<uint64_t>(duration.count());
+
+		uint64_t seed = static_cast<uint64_t>(ms_unsigned);
+		std::mt19937 generator(seed);
+
+		for (size_t i = 0; i < plantHarvest.items.size(); ++i)
+		{
+			//std::cout << "x: " << plantHarvest.amounts[i].x << "\n";
+			//std::cout << "y: " << plantHarvest.amounts[i].y << "\n";
+			std::uniform_int_distribution<int> amountsDistrib
+			(
+				plantHarvest.amounts[i].x,
+				plantHarvest.amounts[i].y
+			);
+
+			int randomAmount = amountsDistrib(generator);
+			//std::cout << "randomAmount: " << randomAmount << "\n";
+
+			while (randomAmount > 0)
+			{
+				playerInventory.items.push_back(plantHarvest.items[i]);
+				randomAmount--;
+			}
+		}
+
+		systemsNC.addComponent
+		(
+			entity,
+			Component::Delete{ 0.0 }
+		);
 	}
 }
 

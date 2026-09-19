@@ -47,6 +47,7 @@ void main()
 	nc.registerComponent<Component::PlantSizes>();
 	nc.registerComponent<Component::PlantTextures>();
 	nc.registerComponent<Component::PlantColors>();
+	nc.registerComponent<Component::PlantHarvest>();
 	nc.registerComponent<Component::Delete>();
 
 	sf::Font font;

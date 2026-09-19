@@ -176,6 +176,14 @@ namespace Component
 		sf::Color mature = sf::Color::White;
 	};
 
+	struct PlantHarvest
+	{
+		double harvestDistance = 0.0;
+		std::vector<Enum::Item> items{};
+		// x: min, y: max
+		std::vector<sf::Vector2i> amounts{};
+	};
+
 	struct Delete
 	{
 		double timer = 0.0;

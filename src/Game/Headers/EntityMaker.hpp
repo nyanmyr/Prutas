@@ -71,7 +71,9 @@ Entity makePlant
 	const std::vector<double> plantTimes,
 	const std::vector<sf::Color> plantColors,
 	const std::vector<sf::Vector2f> plantSizes,
-	const std::vector<Enum::Texture> plantTextures
+	const std::vector<Enum::Texture> plantTextures,
+	const std::unordered_map<Enum::Item, sf::Vector2i>& dropTable,
+	const double harvestDistance
 );
 
 #endif

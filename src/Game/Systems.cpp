@@ -5,8 +5,8 @@
 #include <iostream>
 #include <cmath>
 #include <random>
-#include <ctime>
 #include <vector>
+#include <chrono>
 
 NacreCoordinator& systemsNC = NacreCoordinator::getInstance();
 
@@ -354,23 +354,22 @@ void Control::forage(const Entity player)
 			continue;
 		}
 
-		// this part is probably very resource heavy
-		std::vector<Enum::Item> items{};
-		std::vector<int> weights{};
+		auto now = std::chrono::steady_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch());
 
-		for (const auto& [key, value] : forageSpot.itemTable)
-		{
-			items.push_back(key);
-			weights.push_back(value);
-		}
+		uint64_t ms_unsigned = static_cast<uint64_t>(duration.count());
 
-		unsigned int seed = static_cast<unsigned int>(std::time(nullptr));
+		uint64_t seed = static_cast<uint64_t>(ms_unsigned);
 		std::mt19937 generator(seed);
 
-		std::discrete_distribution<int> distrib(weights.begin(), weights.end());
+		std::discrete_distribution<int> distrib
+		(
+			forageSpot.probabilityWeights.begin(),
+			forageSpot.probabilityWeights.end()
+		);
 
 		int randomWeight = distrib(generator);
-		Enum::Item randomItem = items[randomWeight];
+		Enum::Item randomItem = forageSpot.items[randomWeight];
 
 		playerInventory.items.push_back(randomItem);
 		std::cout << "test: " << randomItem << "\n";

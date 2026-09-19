@@ -119,16 +119,6 @@ void playingScene
 		50.0
 	);
 
-	const std::unordered_map<Enum::Item, int> forageSpot1ItemTable
-	{
-		{Enum::POTATO_SEED, 3},
-		{Enum::WHEAT_SEED, 4},
-		{Enum::BARLEY_SEED, 4},
-		{Enum::CARROT_SEED, 2},
-		{Enum::CORN_SEED, 1},
-		{Enum::SUNFLOWER_SEED, 2},
-	};
-
 	Entity forageSpot1 = makeForageSpot
 	(
 		Enum::Texture::TEXTURE_PLACEHOLDER,
@@ -149,7 +139,14 @@ void playingScene
 			0
 		),
 		50.0,
-		forageSpot1ItemTable
+		{
+			{Enum::POTATO_SEED, 3},
+			{Enum::WHEAT_SEED, 4},
+			{Enum::BARLEY_SEED, 4},
+			{Enum::CARROT_SEED, 2},
+			{Enum::CORN_SEED, 1},
+			{Enum::SUNFLOWER_SEED, 2},
+		}
 	);
 
 	// onstart systems

@@ -8,7 +8,7 @@
 
 #include <optional>
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 namespace Component
 {
@@ -134,8 +134,8 @@ namespace Component
 	struct ForageSpot
 	{
 		double forageDistance = 0.0;
-		// key: item type, value: probability weight
-		std::unordered_map<Enum::Item, int> itemTable{};
+		std::vector<Enum::Item> items{};
+		std::vector<int> probabilityWeights{};
 	};
 
 	struct Delete

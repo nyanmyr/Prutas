@@ -520,13 +520,23 @@ Entity& makeForageSpot
 		max += num;
 	}
 
+	std::vector<Enum::Item> items{};
+	std::vector<int> probabilityWeights{};
+
+	for (auto& [item, probabilityWeight] : itemTable)
+	{
+		items.push_back(item);
+		probabilityWeights.push_back(probabilityWeight);
+	}
+
 	entityMakerNC.addComponent
 	(
 		entity,
 		Component::ForageSpot
 		{
 			forageDistance,
-			std::move(itemTable)
+			std::move(items),
+			std::move(probabilityWeights)
 		}
 	);
 

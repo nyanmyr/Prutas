@@ -308,15 +308,17 @@ void Control::pickup(const Entity player)
 		//std::cout << "distance: " << distance << "\n";
 		//std::cout << "item.pickupdistance: " << item.pickupDistance << "\n";
 
-		if (distance <= item.pickupDistance)
+		if (distance > item.pickupDistance)
 		{
-			playerInventory.items.push_back(item.type);
-			systemsNC.addComponent
-			(
-				entity,
-				Component::Delete{0.0}
-			);
+			continue;
 		}
+
+		playerInventory.items.push_back(item.type);
+		systemsNC.addComponent
+		(
+			entity,
+			Component::Delete{ 0.0 }
+		);
 	}
 }
 void Control::forage(const Entity player)
@@ -347,29 +349,31 @@ void Control::forage(const Entity player)
 		//std::cout << "distance: " << distance << "\n";
 		//std::cout << "item.pickupdistance: " << item.pickupDistance << "\n";
 
-		if (distance <= forageSpot.forageDistance)
+		if (distance > forageSpot.forageDistance)
 		{
-			// this part is probably very resource heavy
-			std::vector<Enum::Item> items{};
-			std::vector<int> weights{};
-
-			for (const auto& [key, value] : forageSpot.itemTable)
-			{
-				items.push_back(key);
-				weights.push_back(value);
-			}
-
-			unsigned int seed = static_cast<unsigned int>(std::time(nullptr));
-			std::mt19937 generator(seed);
-
-			std::discrete_distribution<int> distrib(weights.begin(), weights.end());
-
-			int randomWeight = distrib(generator);
-			Enum::Item randomItem = items[randomWeight];
-
-			playerInventory.items.push_back(randomItem);
-			std::cout << "test: " << randomItem << "\n";
+			continue;
 		}
+
+		// this part is probably very resource heavy
+		std::vector<Enum::Item> items{};
+		std::vector<int> weights{};
+
+		for (const auto& [key, value] : forageSpot.itemTable)
+		{
+			items.push_back(key);
+			weights.push_back(value);
+		}
+
+		unsigned int seed = static_cast<unsigned int>(std::time(nullptr));
+		std::mt19937 generator(seed);
+
+		std::discrete_distribution<int> distrib(weights.begin(), weights.end());
+
+		int randomWeight = distrib(generator);
+		Enum::Item randomItem = items[randomWeight];
+
+		playerInventory.items.push_back(randomItem);
+		std::cout << "test: " << randomItem << "\n";
 	}
 }
 

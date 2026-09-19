@@ -10,8 +10,8 @@ namespace Start
 	void setText(sf::Font& font);
 	void setTextOrigin();
 	void setSpriteOrigin();
-	void loadTextures(Entity loadedTextures);
-	void loadSprites(Entity loadedTextures);
+	void loadTextures(const Entity loadedTextures);
+	void loadSprites(const Entity loadedTextures);
 	void setColor();
 }
 
@@ -50,8 +50,8 @@ namespace Update
 	);
 	void followCamera
 	(
-		Entity camera,
-		DeltaTime dt,
+		const Entity camera,
+		const DeltaTime dt,
 		sf::RenderWindow& window
 	);
 	void grow
@@ -68,7 +68,7 @@ namespace Render
 	(
 		const double top,
 		const double bottom,
-		Entity player
+		const Entity player
 	);
 	void doZIndex(std::queue<Entity>& renderQueue);
 	void render

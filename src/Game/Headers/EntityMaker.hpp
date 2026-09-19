@@ -28,7 +28,7 @@ Entity makeButton
 	const sf::Color col
 );
 Entity makeLoadedTexturesContainer();
-Entity& makeObject
+Entity makeObject
 (
 	const Enum::Texture texture,
 	const sf::Vector2f pos,
@@ -36,7 +36,7 @@ Entity& makeObject
 	const sf::Color col
 );
 
-Entity& makeItem
+Entity makeItem
 (
 	const Enum::Texture texture,
 	const sf::Vector2f pos,
@@ -46,14 +46,14 @@ Entity& makeItem
 	const double pickupDistance
 );
 
-Entity& makeCamera
+Entity makeCamera
 (
 	const double min,
 	const double max,
 	const Entity target
 );
 
-Entity& makeForageSpot
+Entity makeForageSpot
 (
 	const Enum::Texture texture,
 	const sf::Vector2f pos,
@@ -65,7 +65,7 @@ Entity& makeForageSpot
 
 // passing an vector argument with unequal sizes will throw an error
 // while passing vector arguments with exceeding sizes, the exceeding elements will be ignored
-Entity& makePlant
+Entity makePlant
 (
 	const sf::Vector2f pos,
 	const std::vector<double> plantTimes,

@@ -254,7 +254,7 @@ Entity makeLoadedTexturesContainer()
 	return entity;
 }
 
-Entity& makeObject
+Entity makeObject
 (
 	const Enum::Texture texture,
 	const sf::Vector2f pos,
@@ -323,7 +323,7 @@ Entity& makeObject
 	return entity;
 }
 
-Entity& makeItem
+Entity makeItem
 (
 	const Enum::Texture texture,
 	const sf::Vector2f pos,
@@ -413,7 +413,7 @@ Entity& makeItem
 	return entity;
 }
 
-Entity& makeCamera
+Entity makeCamera
 (
 	const double min,
 	const double max,
@@ -436,7 +436,7 @@ Entity& makeCamera
 	return entity;
 }
 
-Entity& makeForageSpot
+Entity makeForageSpot
 (
 	const Enum::Texture texture,
 	const sf::Vector2f pos,
@@ -543,7 +543,7 @@ Entity& makeForageSpot
 	return entity;
 }
 
-Entity& makePlant
+Entity makePlant
 (
 	const sf::Vector2f pos,
 	const std::vector<double> plantTimes,

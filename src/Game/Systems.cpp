@@ -92,7 +92,7 @@ void Start::setSpriteOrigin()
 		);
 	}
 }
-void Start::loadTextures(Entity loadedTextures)
+void Start::loadTextures(const Entity loadedTextures)
 {
 	auto& texturesContainerArray = systemsNC.getComponentArray<Component::TexturesContainer>();
 
@@ -105,7 +105,7 @@ void Start::loadTextures(Entity loadedTextures)
 
 	containerObj.map.emplace(Enum::Texture::TEXTURE_PLACEHOLDER, sf::Texture(SPRITES_PATH "placeholder_texture.jpeg"));
 }
-void Start::loadSprites(Entity loadedTextures)
+void Start::loadSprites(const Entity loadedTextures)
 {
 	auto& spriteArray = systemsNC.getComponentArray<Component::Sprite>();
 	auto& transformArray = systemsNC.getComponentArray<Component::Transform>();
@@ -622,8 +622,8 @@ const double SMOOTHNESS_GROWTH = 1.0;
 
 void Update::followCamera
 (
-	Entity camera,
-	DeltaTime dt,
+	const Entity camera,
+	const DeltaTime dt,
 	sf::RenderWindow& window
 )
 {
@@ -853,7 +853,7 @@ void Render::alignZIndexWithYAxis
 (
 	const double top,
 	const double bottom,
-	Entity player
+	const Entity player
 )
 {
 	auto& positionArray = systemsNC.getComponentArray<Component::Position>();

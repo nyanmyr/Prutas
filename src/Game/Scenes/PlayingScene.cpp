@@ -188,6 +188,49 @@ void playingScene
 		50.0
 	);
 
+	Entity cornPlant = makePlant
+	(
+		sf::Vector2f
+		(
+			-150.0,
+			100.0
+		),
+		{ // plantTimes
+			5.0,
+			5.0,
+			5.0
+		},
+		{ // plantColors
+			sf::Color(51, 252, 3),
+			sf::Color(77, 252, 3),
+			sf::Color(171, 252, 3),
+			sf::Color(234, 252, 3),
+		},
+		{ // plantSizes
+			sf::Vector2f(5.0, 5.0),
+			sf::Vector2f(10.0, 10.0),
+			sf::Vector2f(20.0, 30.0),
+			sf::Vector2f(30.0, 50.0)
+		},
+		{ // plantTextures
+			Enum::Texture::TEXTURE_PLACEHOLDER,
+			Enum::Texture::TEXTURE_PLACEHOLDER,
+			Enum::Texture::TEXTURE_PLACEHOLDER,
+			Enum::Texture::TEXTURE_PLACEHOLDER,
+		},
+		{
+			{
+				Enum::Item::CORN_SEED,
+				{1, 3}
+			},
+			{
+				Enum::Item::CORN,
+				{1, 1}
+			}
+		},
+		50.0
+	);
+
 	// onstart systems
 	Start::setText(font); // font system is limited to one font
 	Start::setTextOrigin();

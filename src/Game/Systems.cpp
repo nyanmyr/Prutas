@@ -436,6 +436,8 @@ void Control::harvest(const Entity player)
 			}
 		}
 
+		//std::cout << "inventory size: " << static_cast<int>(playerInventory.items.size()) << "\n";
+
 		systemsNC.addComponent
 		(
 			entity,

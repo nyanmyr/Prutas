@@ -445,6 +445,64 @@ void Control::harvest(const Entity player)
 		);
 	}
 }
+void Control::openInventory(const Entity player)
+{
+	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::Velocity>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::Inventory>()->hasData(player)) return;
+
+	Component::PlayerController& playerController = systemsNC.getComponentArray<Component::PlayerController>()->getData(player);
+	Component::Velocity& velocity = systemsNC.getComponentArray<Component::Velocity>()->getData(player);
+	Component::Inventory& inventory = systemsNC.getComponentArray<Component::Inventory>()->getData(player);
+
+	if (inventory.items.empty())
+	{
+		return;
+		std::cout << "Inventory is empty!" << "\n";
+	}
+
+	// toggles it on or off
+	playerController.enabled = !playerController.enabled;
+	// std::cout << "Opened inventory: " << (playerController.enabled ? "True" : "False") << "\n";
+
+	inventory.opened = !playerController.enabled;
+
+	if (!playerController.enabled)
+	{
+		velocity.x = velocity.x * 0.1;
+		velocity.y = velocity.y * 0.1;
+	}
+
+	std::cout << "Currently Selected: " << static_cast<int>(inventory.items[inventory.current]) << "\n";
+
+}
+void Control::inventorySelectLeft(const Entity player)
+{
+	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::Inventory>()->hasData(player)) return;
+
+	Component::PlayerController& playerController = systemsNC.getComponentArray<Component::PlayerController>()->getData(player);
+	Component::Inventory& inventory = systemsNC.getComponentArray<Component::Inventory>()->getData(player);
+
+	if (!inventory.opened) return;
+
+	inventory.current = inventory.current == 0 ? inventory.items.size() - 1 : inventory.current - 1;
+	std::cout << "New current: " << static_cast<int>(inventory.current) << "\n";
+}
+void Control::inventorySelectRight(const Entity player)
+{
+	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::Inventory>()->hasData(player)) return;
+
+	Component::PlayerController& playerController = systemsNC.getComponentArray<Component::PlayerController>()->getData(player);
+	Component::Inventory& inventory = systemsNC.getComponentArray<Component::Inventory>()->getData(player);
+
+	if (!inventory.opened) return;
+
+	inventory.current = inventory.current >= inventory.items.size() - 1 ?
+		0 : inventory.current + 1;
+	std::cout << "New current: " << static_cast<int>(inventory.current) << "\n";
+}
 
 // -------------------------------------------------------
 // update systems

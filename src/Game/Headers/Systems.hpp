@@ -30,6 +30,9 @@ namespace Control
 	void pickup(const Entity player);
 	void forage(const Entity player);
 	void harvest(const Entity player);
+	void openInventory(const Entity player);
+	void inventorySelectLeft(const Entity player);
+	void inventorySelectRight(const Entity player);
 }
 
 namespace Update

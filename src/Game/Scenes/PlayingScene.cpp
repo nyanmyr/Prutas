@@ -259,6 +259,21 @@ void playingScene
 					Control::forage(player);
 					Control::harvest(player);
 				}
+
+				if (keyReleased->scancode == sf::Keyboard::Scancode::R)
+				{
+					Control::openInventory(player);
+				}
+
+				if (keyReleased->scancode == sf::Keyboard::Scancode::Q)
+				{
+					Control::inventorySelectLeft(player);
+				}
+
+				if (keyReleased->scancode == sf::Keyboard::Scancode::E)
+				{
+					Control::inventorySelectRight(player);
+				}
 			}
 		}
 

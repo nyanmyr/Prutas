@@ -123,6 +123,8 @@ namespace Component
 	struct Inventory
 	{
 		std::vector<Enum::Item> items{};
+		uint8_t current = 0;
+		bool opened = false;
 	};
 
 	struct Item

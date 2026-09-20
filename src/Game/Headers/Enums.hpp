@@ -3,19 +3,19 @@
 
 namespace Enum
 {
-	enum TextFormat
+	enum class TextFormat
 	{
 		TOP,
 		MIDDLE,
 		BOTTOM
 	};
 
-	enum Texture
+	enum class Texture
 	{
 		TEXTURE_PLACEHOLDER
 	};
 
-	enum Item
+	enum class Item
 	{
 		NULL_ITEM, // basically means it can't be picked up
 		POTATO,

@@ -115,7 +115,7 @@ void playingScene
 			100,
 			0
 		),
-		Enum::POTATO,
+		Enum::Item::POTATO,
 		50.0
 	);
 
@@ -140,12 +140,12 @@ void playingScene
 		),
 		50.0,
 		{
-			{Enum::POTATO, 3},
-			{Enum::WHEAT_SEED, 4},
-			{Enum::BARLEY_SEED, 4},
-			{Enum::CARROT, 2},
-			{Enum::CORN_SEED, 1},
-			{Enum::SUNFLOWER_SEED, 2},
+			{Enum::Item::POTATO, 3},
+			{Enum::Item::WHEAT_SEED, 4},
+			{Enum::Item::BARLEY_SEED, 4},
+			{Enum::Item::CARROT, 2},
+			{Enum::Item::CORN_SEED, 1},
+			{Enum::Item::SUNFLOWER_SEED, 2},
 		}
 	);
 
@@ -181,7 +181,7 @@ void playingScene
 		},
 		{
 			{
-				Enum::POTATO,
+				Enum::Item::POTATO,
 				{1, 2}
 			}
 		},

@@ -368,7 +368,7 @@ void Control::forage(const Entity player)
 		Enum::Item randomItem = forageSpot.items[randomWeight];
 
 		playerInventory.items.push_back(randomItem);
-		std::cout << "test: " << randomItem << "\n";
+		//std::cout << "foraged item: " << static_cast<int>(randomItem) << "\n";
 	}
 }
 void Control::harvest(const Entity player)

@@ -157,9 +157,9 @@ void playingScene
 			100.0
 		),
 		{ // plantTimes
-			5.0,
-			5.0,
-			5.0
+			1.0,
+			1.0,
+			1.0
 		},
 		{ // plantColors
 			sf::Color(51, 43, 6),
@@ -235,14 +235,15 @@ void playingScene
 	Start::setText(font); // font system is limited to one font
 	Start::setTextOrigin();
 
-	Start::loadTextures(loadedTextures);
-	Start::loadSprites(loadedTextures);
-	Start::setSpriteOrigin();
-	Start::setColor();
-
 	while (window.isOpen())
 	{
 		DeltaTime dt = clock.restart().asSeconds();
+
+		// convert to Update methods
+		Start::loadTextures(loadedTextures);
+		Start::loadSprites(loadedTextures);
+		Start::setSpriteOrigin();
+		Start::setColor();
 
 		while (const std::optional event = window.pollEvent())
 		{
@@ -273,6 +274,11 @@ void playingScene
 				if (keyReleased->scancode == sf::Keyboard::Scancode::E)
 				{
 					Control::inventorySelectRight(player);
+				}
+
+				if (keyReleased->scancode == sf::Keyboard::Scancode::F)
+				{
+					Control::plant(player);
 				}
 			}
 		}

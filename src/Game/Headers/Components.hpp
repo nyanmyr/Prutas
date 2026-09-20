@@ -164,10 +164,10 @@ namespace Component
 
 	struct PlantTextures
 	{
-		Enum::Texture seed;
-		Enum::Texture seedling;
-		Enum::Texture flowering;
-		Enum::Texture mature;
+		Enum::Texture seed = Enum::Texture::TEXTURE_PLACEHOLDER;
+		Enum::Texture seedling = Enum::Texture::TEXTURE_PLACEHOLDER;
+		Enum::Texture flowering = Enum::Texture::TEXTURE_PLACEHOLDER;
+		Enum::Texture mature = Enum::Texture::TEXTURE_PLACEHOLDER;
 	};
 
 	struct PlantColors

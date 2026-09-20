@@ -1,4 +1,5 @@
 #include "Headers/Systems.hpp"
+#include "Headers/EntityMaker.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -457,8 +458,8 @@ void Control::openInventory(const Entity player)
 
 	if (inventory.items.empty())
 	{
-		return;
 		std::cout << "Inventory is empty!" << "\n";
+		return;
 	}
 
 	// toggles it on or off
@@ -473,8 +474,8 @@ void Control::openInventory(const Entity player)
 		velocity.y = velocity.y * 0.1;
 	}
 
-	std::cout << "Currently Selected: " << static_cast<int>(inventory.items[inventory.current]) << "\n";
-
+	//std::cout << "Currently Selected: " << static_cast<int>(inventory.items[inventory.current]) << "\n";
+	std::cout << "Inventory Size: " << static_cast<int>(inventory.items.size()) << "\n";
 }
 void Control::inventorySelectLeft(const Entity player)
 {
@@ -486,7 +487,7 @@ void Control::inventorySelectLeft(const Entity player)
 
 	if (!inventory.opened) return;
 
-	inventory.current = inventory.current == 0 ? inventory.items.size() - 1 : inventory.current - 1;
+	inventory.current = inventory.current == 0 ? 0 : inventory.current - 1;
 	std::cout << "New current: " << static_cast<int>(inventory.current) << "\n";
 }
 void Control::inventorySelectRight(const Entity player)
@@ -499,9 +500,169 @@ void Control::inventorySelectRight(const Entity player)
 
 	if (!inventory.opened) return;
 
-	inventory.current = inventory.current >= inventory.items.size() - 1 ?
+	inventory.current = inventory.current + 1 > inventory.items.size() - 1 ?
 		0 : inventory.current + 1;
 	std::cout << "New current: " << static_cast<int>(inventory.current) << "\n";
+}
+
+#pragma region POTATO_PLANT_CONSTANTS
+const double POTATO_SEED_PLANT_TIME = 1.0;
+const double POTATO_SEEDLING_PLANT_TIME = 1.0;
+const double POTATO_FLOWERING_PLANT_TIME = 1.0;
+
+const sf::Color POTATO_SEED_COLOR = sf::Color(51, 43, 6);
+const sf::Color POTATO_SEEDLING_COLOR = sf::Color(77, 43, 6);
+const sf::Color POTATO_FLOWERING_COLOR = sf::Color(171, 43, 6);
+const sf::Color POTATO_MATURE_COLOR = sf::Color(234, 43, 6);
+
+const double POTATO_SEED_X = 5.0;
+const double POTATO_SEED_Y = 5.0;
+
+const double POTATO_SEEDLING_X = 10.0;
+const double POTATO_SEEDLING_Y = 10.0;
+
+const double POTATO_FLOWERING_X = 20.0;
+const double POTATO_FLOWERING_Y = 20.0;
+
+const double POTATO_MATURE_X = 30.0;
+const double POTATO_MATURE_Y = 30.0;
+
+const Enum::Texture POTATO_SEED_TEXTURE = Enum::Texture::TEXTURE_PLACEHOLDER;
+const Enum::Texture POTATO_SEEDLING_TEXTURE = Enum::Texture::TEXTURE_PLACEHOLDER;
+const Enum::Texture POTATO_FLOWERING_TEXTURE = Enum::Texture::TEXTURE_PLACEHOLDER;
+const Enum::Texture POTATO_MATURE_TEXTURE = Enum::Texture::TEXTURE_PLACEHOLDER;
+
+std::unordered_map<Enum::Item, sf::Vector2i> POTATO_DROP_TABLE
+{
+	{
+		Enum::Item::POTATO,
+		{1, 2}
+	}
+};
+const double POTATO_HARVEST_DISTANCE = 30.0;
+#pragma endregion
+
+void Control::plant(const Entity player)
+{
+	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::Inventory>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::Transform>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::Position>()->hasData(player)) return;
+
+	const Component::Transform transform = systemsNC.getComponentArray<Component::Transform>()->getData(player);
+	const Component::Position position = systemsNC.getComponentArray<Component::Position>()->getData(player);
+	Component::PlayerController& playerController = systemsNC.getComponentArray<Component::PlayerController>()->getData(player);
+	Component::Inventory& inventory = systemsNC.getComponentArray<Component::Inventory>()->getData(player);
+
+	if (inventory.items.empty() ||
+		inventory.opened) return;
+
+	bool planted = false;
+
+	double seedPlantTime = 0.0;
+	double seedlingPlantTime = 0.0;
+	double floweringPlantTime = 0.0;
+
+	sf::Color seedColor = sf::Color::White;
+	sf::Color seedlingColor = sf::Color::White;
+	sf::Color floweringColor = sf::Color::White;
+	sf::Color matureColor = sf::Color::White;
+
+	double seedX = 0.0;
+	double seedY = 0.0;
+
+	double seedlingX = 0.0;
+	double seedlingY = 0.0;
+
+	double floweringX = 0.0;
+	double floweringY = 0.0;
+
+	double matureX = 0.0;
+	double matureY = 0.0;
+
+	Enum::Texture seedTexture = Enum::Texture::TEXTURE_PLACEHOLDER;
+	Enum::Texture seedlingTexture = Enum::Texture::TEXTURE_PLACEHOLDER;
+	Enum::Texture floweringTexture = Enum::Texture::TEXTURE_PLACEHOLDER;
+	Enum::Texture matureTexture = Enum::Texture::TEXTURE_PLACEHOLDER;
+
+	std::unordered_map<Enum::Item, sf::Vector2i> dropTable{};
+	double harvestDistance = 0.0;
+
+	if (inventory.items[inventory.current] == Enum::Item::POTATO)
+	{
+		seedPlantTime = POTATO_SEED_PLANT_TIME;
+		seedlingPlantTime = POTATO_SEEDLING_PLANT_TIME;
+		floweringPlantTime = POTATO_FLOWERING_PLANT_TIME;
+
+		seedColor = POTATO_SEED_COLOR;
+		seedlingColor = POTATO_SEEDLING_COLOR;
+		floweringColor = POTATO_FLOWERING_COLOR;
+		matureColor = POTATO_MATURE_COLOR;
+
+		seedX = POTATO_SEED_X;
+		seedY = POTATO_SEED_Y;
+
+		seedlingX = POTATO_SEEDLING_X;
+		seedlingY = POTATO_SEEDLING_Y;
+
+		floweringX = POTATO_FLOWERING_X;
+		floweringY = POTATO_FLOWERING_Y;
+
+		matureX = POTATO_MATURE_X;
+		matureY = POTATO_MATURE_Y;
+
+		seedTexture = POTATO_SEED_TEXTURE;
+		seedlingTexture = POTATO_SEEDLING_TEXTURE;
+		floweringTexture = POTATO_FLOWERING_TEXTURE;
+		matureTexture = POTATO_MATURE_TEXTURE;
+
+		dropTable = POTATO_DROP_TABLE;
+		harvestDistance = POTATO_HARVEST_DISTANCE;
+
+		planted = true;
+	}
+
+	if (!planted) return;
+
+	// removes the planted item
+	inventory.items.erase(inventory.items.begin() + inventory.current);
+
+	// decrements current if it is not 0
+	inventory.current = inventory.current == 0 ? 0 : inventory.current - 1;
+
+	makePlant
+	(
+		sf::Vector2f
+		(
+			position.x,
+			position.y + (transform.height / 2.0)
+		),
+		{ // plantTimes
+			seedPlantTime,
+			seedlingPlantTime,
+			floweringPlantTime
+		},
+		{ // plantColors
+			seedColor,
+			seedlingColor,
+			floweringColor,
+			matureColor
+		},
+		{ // plantSizes
+			sf::Vector2f(seedX, seedY),
+			sf::Vector2f(seedlingX, seedlingY),
+			sf::Vector2f(floweringX, floweringY),
+			sf::Vector2f(matureX, matureY)
+		},
+		{ // plantTextures
+			seedTexture,
+			seedlingTexture,
+			floweringTexture,
+			matureTexture
+		},
+		std::move(dropTable),
+		harvestDistance
+	);
 }
 
 // -------------------------------------------------------
@@ -1065,15 +1226,18 @@ void Render::render
 		{
 			Component::Sprite& spriteObj = spriteArray->getData(popped);
 
-			spriteObj.body->setPosition
-			(
-				sf::Vector2f
+			if (spriteObj.body.has_value())
+			{
+				spriteObj.body->setPosition
 				(
-					posObj.x,
-					posObj.y
-				)
-			);
-			window.draw(spriteObj.body.value());
+					sf::Vector2f
+					(
+						posObj.x,
+						posObj.y
+					)
+				);
+				window.draw(spriteObj.body.value());
+			}
 		}
 
 		if (textArray->hasData(popped))

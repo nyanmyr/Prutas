@@ -76,4 +76,13 @@ Entity makePlant
 	const double harvestDistance
 );
 
+Entity makeSeller
+(
+	const Enum::Texture texture,
+	const sf::Vector2f pos,
+	const sf::Vector2f size,
+	const sf::Color col,
+	const double sellDistance
+);
+
 #endif

@@ -512,6 +512,99 @@ void Control::inventorySelectRight(const Entity player)
 	// std::cout << "New current: " << static_cast<int>(inventory.current) << "\n";
 }
 
+#pragma region ITEM_SELL_PRICES
+const int POTATO_SELL_PRICE = 10;
+const int CARROT_SELL_PRICE = 10;
+const int WHEAT_SEED_SELL_PRICE = 10;
+const int WHEAT_SELL_PRICE = 10;
+const int BARLEY_SEED_SELL_PRICE = 10;
+const int BARLEY_SELL_PRICE = 10;
+const int CORN_SEED_SELL_PRICE = 10;
+const int CORN_SELL_PRICE = 10;
+const int SUNFLOWER_SEED_SELL_PRICE = 10;
+const int SUNFLOWER_SELL_PRICE = 10;
+#pragma endregion
+
+void Control::sellAllItems(const Entity player)
+{
+	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
+	auto& inventoryArray = systemsNC.getComponentArray<Component::Inventory>();
+	auto& shillingsArray = systemsNC.getComponentArray<Component::Shillings>();
+	auto& sellAreaArray = systemsNC.getComponentArray<Component::SellArea>();
+
+	if (!positionArray->hasData(player) ||
+		!inventoryArray->hasData(player) ||
+		!shillingsArray->hasData(player)) return;
+
+	const Component::Position playerPos = positionArray->getData(player);
+	Component::Inventory& playerInventory = inventoryArray->getData(player);
+	Component::Shillings& shillings = shillingsArray->getData(player);
+
+	if (playerInventory.items.empty()) return;
+
+	for (auto& [entity, sellArea] : sellAreaArray->getAll())
+	{
+		if (!positionArray->hasData(entity)) continue;
+
+		const Component::Position& sellAreaPos = positionArray->getData(entity);
+
+		double distance = [](Component::Position a, Component::Position b)
+			{
+				return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
+			}
+		(playerPos, sellAreaPos);
+
+		//std::cout << "distance: " << distance << "\n";
+		//std::cout << "sellArea.distance: " << sellArea.distance << "\n";
+
+		if (distance > sellArea.distance) continue;
+
+		playerInventory.current = 0;
+
+		for (Enum::Item item : playerInventory.items)
+		{
+			switch (item)
+			{
+				case Enum::Item::POTATO:
+					shillings.amount += POTATO_SELL_PRICE;
+					break;
+				case Enum::Item::CARROT:
+					shillings.amount += CARROT_SELL_PRICE;
+					break;
+				case Enum::Item::WHEAT_SEED:
+					shillings.amount += WHEAT_SEED_SELL_PRICE;
+					break;
+				case Enum::Item::WHEAT:
+					shillings.amount += WHEAT_SELL_PRICE;
+					break;
+				case Enum::Item::BARLEY_SEED:
+					shillings.amount += BARLEY_SEED_SELL_PRICE;
+					break;
+				case Enum::Item::BARLEY:
+					shillings.amount += BARLEY_SELL_PRICE;
+					break;
+				case Enum::Item::CORN_SEED:
+					shillings.amount += CORN_SEED_SELL_PRICE;
+					break;
+				case Enum::Item::CORN:
+					shillings.amount += CORN_SELL_PRICE;
+					break;
+				case Enum::Item::SUNFLOWER_SEED:
+					shillings.amount += SUNFLOWER_SEED_SELL_PRICE;
+					break;
+				case Enum::Item::SUNFLOWER:
+					shillings.amount += SUNFLOWER_SELL_PRICE;
+					break;
+				default:
+					shillings.amount += 0;
+					break;
+			}
+		}
+
+		playerInventory.items.clear();
+	}
+}
+
 #pragma region POTATO_PLANT_CONSTANTS
 const double POTATO_SEED_PLANT_TIME = 1.0;
 const double POTATO_SEEDLING_PLANT_TIME = 1.0;

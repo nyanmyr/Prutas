@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "../src/Game/Headers/GameManager.hpp"
 #include "../src/Game/Headers/Scenes.hpp"
+#include <iostream>
 
 void playingScene
 (
@@ -231,6 +232,28 @@ void playingScene
 		50.0
 	);
 
+	Entity seller = makeSeller
+	(
+		Enum::Texture::TEXTURE_PLACEHOLDER,
+		sf::Vector2f
+		(
+			-100.0,
+			25.0
+		),
+		sf::Vector2f
+		(
+			30.0,
+			40.0
+		),
+		sf::Color
+		(
+			3,
+			86,
+			252
+		),
+		50.0
+	);
+
 	// onstart systems
 	Start::setText(font); // font system is limited to one font
 	Start::setTextOrigin();
@@ -279,6 +302,18 @@ void playingScene
 				if (keyReleased->scancode == sf::Keyboard::Scancode::F)
 				{
 					Control::plant(player);
+				}
+
+				if (keyReleased->scancode == sf::Keyboard::Scancode::Num1)
+				{
+					Control::sellAllItems(player);
+				}
+
+				// for debugging
+				if (keyReleased->scancode == sf::Keyboard::Scancode::X)
+				{
+					std::cout << "Shillings: " <<
+						nc.getComponentArray<Component::Shillings>()->getData(player).amount << "\n";
 				}
 			}
 		}

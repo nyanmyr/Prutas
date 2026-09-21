@@ -131,6 +131,11 @@ namespace Component
 		uint8_t current = 0;
 	};
 
+	struct Shillings
+	{
+		int amount = 0;
+	};
+
 	struct Item
 	{
 		Enum::Item type = Enum::Item::NULL_ITEM;
@@ -193,6 +198,11 @@ namespace Component
 	struct Delete
 	{
 		double timer = 0.0;
+	};
+
+	struct SellArea
+	{
+		double distance = 0.0;
 	};
 }
 

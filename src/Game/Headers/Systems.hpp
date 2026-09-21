@@ -34,6 +34,7 @@ namespace Control
 	void inventorySelectLeft(const Entity player);
 	void inventorySelectRight(const Entity player);
 	void plant(const Entity player);
+	void sellAllItems(const Entity player);
 }
 
 namespace Update

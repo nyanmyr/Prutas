@@ -42,6 +42,7 @@ void main()
 	nc.registerComponent<Component::Color>();
 	nc.registerComponent<Component::Camera>();
 	nc.registerComponent<Component::Inventory>();
+	nc.registerComponent<Component::Shillings>();
 	nc.registerComponent<Component::Item>();
 	nc.registerComponent<Component::ForageSpot>();
 	nc.registerComponent<Component::PlantTimes>();
@@ -50,6 +51,7 @@ void main()
 	nc.registerComponent<Component::PlantColors>();
 	nc.registerComponent<Component::PlantHarvest>();
 	nc.registerComponent<Component::Delete>();
+	nc.registerComponent<Component::SellArea>();
 
 	sf::Font font;
 	if (!font.openFromFile(FONT_FILEPATH))

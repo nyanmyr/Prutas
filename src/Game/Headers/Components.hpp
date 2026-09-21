@@ -87,6 +87,11 @@ namespace Component
 		bool enabled = false;
 	};
 
+	struct PlayerAction
+	{
+		Enum::PlayerState state = Enum::PlayerState::IDLE;
+	};
+
 	struct Drag
 	{
 		double x = 0.0;
@@ -124,7 +129,6 @@ namespace Component
 	{
 		std::vector<Enum::Item> items{};
 		uint8_t current = 0;
-		bool opened = false;
 	};
 
 	struct Item

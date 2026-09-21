@@ -449,16 +449,18 @@ void Control::harvest(const Entity player)
 void Control::openInventory(const Entity player)
 {
 	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::PlayerAction>()->hasData(player) ||
 		!systemsNC.getComponentArray<Component::Velocity>()->hasData(player) ||
 		!systemsNC.getComponentArray<Component::Inventory>()->hasData(player)) return;
 
 	Component::PlayerController& playerController = systemsNC.getComponentArray<Component::PlayerController>()->getData(player);
+	Component::PlayerAction& playerAction = systemsNC.getComponentArray<Component::PlayerAction>()->getData(player);
 	Component::Velocity& velocity = systemsNC.getComponentArray<Component::Velocity>()->getData(player);
 	Component::Inventory& inventory = systemsNC.getComponentArray<Component::Inventory>()->getData(player);
 
 	if (inventory.items.empty())
 	{
-		std::cout << "Inventory is empty!" << "\n";
+		//std::cout << "Inventory is empty!" << "\n";
 		return;
 	}
 
@@ -466,7 +468,8 @@ void Control::openInventory(const Entity player)
 	playerController.enabled = !playerController.enabled;
 	// std::cout << "Opened inventory: " << (playerController.enabled ? "True" : "False") << "\n";
 
-	inventory.opened = !playerController.enabled;
+	playerAction.state = playerController.enabled ?
+		Enum::PlayerState::IDLE : Enum::PlayerState::OPENED_INVENTORY;
 
 	if (!playerController.enabled)
 	{
@@ -475,34 +478,38 @@ void Control::openInventory(const Entity player)
 	}
 
 	//std::cout << "Currently Selected: " << static_cast<int>(inventory.items[inventory.current]) << "\n";
-	std::cout << "Inventory Size: " << static_cast<int>(inventory.items.size()) << "\n";
+	//std::cout << "Inventory Size: " << static_cast<int>(inventory.items.size()) << "\n";
 }
 void Control::inventorySelectLeft(const Entity player)
 {
 	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::PlayerAction>()->hasData(player) ||
 		!systemsNC.getComponentArray<Component::Inventory>()->hasData(player)) return;
 
 	Component::PlayerController& playerController = systemsNC.getComponentArray<Component::PlayerController>()->getData(player);
+	const Component::PlayerAction& playerAction = systemsNC.getComponentArray<Component::PlayerAction>()->getData(player);
 	Component::Inventory& inventory = systemsNC.getComponentArray<Component::Inventory>()->getData(player);
 
-	if (!inventory.opened) return;
+	if (playerAction.state != Enum::PlayerState::OPENED_INVENTORY) return;
 
 	inventory.current = inventory.current == 0 ? 0 : inventory.current - 1;
-	std::cout << "New current: " << static_cast<int>(inventory.current) << "\n";
+	// std::cout << "New current: " << static_cast<int>(inventory.current) << "\n";
 }
 void Control::inventorySelectRight(const Entity player)
 {
 	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::PlayerAction>()->hasData(player) ||
 		!systemsNC.getComponentArray<Component::Inventory>()->hasData(player)) return;
 
 	Component::PlayerController& playerController = systemsNC.getComponentArray<Component::PlayerController>()->getData(player);
+	const Component::PlayerAction& playerAction = systemsNC.getComponentArray<Component::PlayerAction>()->getData(player);
 	Component::Inventory& inventory = systemsNC.getComponentArray<Component::Inventory>()->getData(player);
 
-	if (!inventory.opened) return;
+	if (playerAction.state != Enum::PlayerState::OPENED_INVENTORY) return;
 
 	inventory.current = inventory.current + 1 > inventory.items.size() - 1 ?
 		0 : inventory.current + 1;
-	std::cout << "New current: " << static_cast<int>(inventory.current) << "\n";
+	// std::cout << "New current: " << static_cast<int>(inventory.current) << "\n";
 }
 
 #pragma region POTATO_PLANT_CONSTANTS
@@ -545,6 +552,7 @@ const double POTATO_HARVEST_DISTANCE = 30.0;
 void Control::plant(const Entity player)
 {
 	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::PlayerAction>()->hasData(player) ||
 		!systemsNC.getComponentArray<Component::Inventory>()->hasData(player) ||
 		!systemsNC.getComponentArray<Component::Transform>()->hasData(player) ||
 		!systemsNC.getComponentArray<Component::Position>()->hasData(player)) return;
@@ -552,10 +560,11 @@ void Control::plant(const Entity player)
 	const Component::Transform transform = systemsNC.getComponentArray<Component::Transform>()->getData(player);
 	const Component::Position position = systemsNC.getComponentArray<Component::Position>()->getData(player);
 	Component::PlayerController& playerController = systemsNC.getComponentArray<Component::PlayerController>()->getData(player);
+	const Component::PlayerAction& playerAction = systemsNC.getComponentArray<Component::PlayerAction>()->getData(player);
 	Component::Inventory& inventory = systemsNC.getComponentArray<Component::Inventory>()->getData(player);
 
 	if (inventory.items.empty() ||
-		inventory.opened) return;
+		playerAction.state != Enum::PlayerState::IDLE) return;
 
 	bool planted = false;
 

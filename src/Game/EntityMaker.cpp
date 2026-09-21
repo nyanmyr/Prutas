@@ -130,6 +130,12 @@ Entity makePlayer
 		Component::Inventory{}
 	);
 
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::PlayerAction{}
+	);
+
 	return entity;
 }
 

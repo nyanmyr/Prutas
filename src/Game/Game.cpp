@@ -34,6 +34,7 @@ void main()
 	nc.registerComponent<Component::Velocity>();
 	nc.registerComponent<Component::Speed>();
 	nc.registerComponent<Component::PlayerController>();
+	nc.registerComponent<Component::PlayerAction>();
 	nc.registerComponent<Component::Drag>();
 	nc.registerComponent<Component::Sprite>();
 	nc.registerComponent<Component::Texture>();

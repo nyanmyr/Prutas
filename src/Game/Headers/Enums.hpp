@@ -29,6 +29,12 @@ namespace Enum
 		SUNFLOWER_SEED,
 		SUNFLOWER
 	};
+
+	enum class PlayerState
+	{
+		IDLE,
+		OPENED_INVENTORY
+	};
 }
 
 #endif

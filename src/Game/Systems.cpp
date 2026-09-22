@@ -770,6 +770,19 @@ void Control::plant(const Entity player)
 // -------------------------------------------------------
 // update systems
 // -------------------------------------------------------
+const double TIME_SPEED_MULTIPLIER_DEBUG = 2.0;
+
+void Update::timeCycle
+(
+	const DeltaTime dt,
+	Component::TimeCycle& timeCycle,
+	Component::TimePassed& timePassed,
+	Component::TimeDefaults& timeDefaults,
+	Component::Season& season
+)
+{	
+	
+}
 void Update::doButtons
 (
 	const sf::Vector2i mouseVector,

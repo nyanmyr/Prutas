@@ -35,6 +35,14 @@ namespace Enum
 		IDLE,
 		OPENED_INVENTORY
 	};
+
+	enum class Season
+	{
+		SPRING,
+		SUMMER,
+		FALL,
+		WINTER
+	};
 }
 
 #endif

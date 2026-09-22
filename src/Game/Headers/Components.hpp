@@ -204,6 +204,38 @@ namespace Component
 	{
 		double distance = 0.0;
 	};
+
+	struct TimeCycle
+	{
+		double time = 0.0;
+		uint8_t days = 0;
+		uint8_t weeks = 0;
+		uint8_t months = 0;
+	};
+
+	struct TimePassed
+	{
+		// can get overflow
+		double time = 0.0;
+		uint8_t days = 0;
+		uint8_t weeks = 0;
+		uint8_t months = 0;
+		uint8_t seasons = 0;
+		uint8_t years = 0;
+	};
+
+	struct TimeDefaults
+	{
+		double time = 0.0; // in seconds
+		uint8_t days = 0;
+		uint8_t weeks = 0;
+		uint8_t months = 0; // per season
+	};
+
+	struct Season
+	{
+		Enum::Season current = Enum::Season::SPRING;
+	};
 }
 
 #endif

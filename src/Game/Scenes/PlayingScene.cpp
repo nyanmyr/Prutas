@@ -253,6 +253,35 @@ void playingScene
 		),
 		50.0
 	);
+	
+	// per second
+	const double TIMECYCLE_MINUTES = 60.0;
+	const double TIMECYCLE_HOURS = 12.0; // whole day
+
+	const double STARTING_TIME = (TIMECYCLE_MINUTES * 3); // equal to 3 AM
+
+	const double DEFAULT_TIME = (TIMECYCLE_MINUTES * TIMECYCLE_HOURS);
+	const uint8_t DEFAULT_DAYS = 7; // per week
+	const uint8_t DEFAULT_WEEKS = 4; // per month
+	const uint8_t DEFAULT_MONTHS = 3; // per season
+
+	// universal entity
+	Component::TimeCycle timeCycle
+	{
+		DEFAULT_TIME, // time (in seconds)
+		DEFAULT_DAYS, // days
+		DEFAULT_WEEKS, // weeks
+		DEFAULT_MONTHS // months
+	};
+	Component::TimePassed timePassed{};
+	Component::TimeDefaults timeDefaults
+	{
+		DEFAULT_TIME, // time (in seconds)
+		DEFAULT_DAYS, // days
+		DEFAULT_WEEKS, // weeks
+		DEFAULT_MONTHS // months
+	};
+	Component::Season season{};
 
 	// onstart systems
 	Start::setText(font); // font system is limited to one font
@@ -261,6 +290,15 @@ void playingScene
 	while (window.isOpen())
 	{
 		DeltaTime dt = clock.restart().asSeconds();
+
+		Update::timeCycle
+		(
+			dt,
+			timeCycle,
+			timePassed,
+			timeDefaults,
+			season
+		);
 
 		// convert to Update methods
 		Start::loadTextures(loadedTextures);

@@ -39,6 +39,14 @@ namespace Control
 
 namespace Update
 {
+	void timeCycle
+	(
+		const DeltaTime dt,
+		Component::TimeCycle& timeCycle,
+		Component::TimePassed& timePassed,
+		Component::TimeDefaults& timeDefaults,
+		Component::Season& season
+	);
 	void doButtons
 	(
 		const sf::Vector2i mouseVector,

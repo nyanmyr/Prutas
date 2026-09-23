@@ -781,7 +781,58 @@ void Update::timeCycle
 	Component::Season& season
 )
 {	
+	//std::cout << "time: " << timeCycle.time << "\n";
+
+	timeCycle.time -= (dt * TIME_SPEED_MULTIPLIER_DEBUG);
+	timePassed.time += (dt * TIME_SPEED_MULTIPLIER_DEBUG);
+
+	if (timeCycle.time > 0) return;
+	//std::cout << "A day has passed!" << "\n";
+	timeCycle.time = timeDefaults.time;
+	timeCycle.days--;
+	timePassed.days++;
+
+	if (timeCycle.days > 0) return;
+	//std::cout << "A week has passed!" << "\n";
+	timeCycle.days = timeDefaults.days;
+	timeCycle.weeks--;
+	timePassed.weeks++;
+
+	if (timeCycle.weeks > 0) return;
+	//std::cout << "A month has passed!" << "\n";
+	timeCycle.weeks = timeDefaults.weeks;
+	timeCycle.months--;
+	timePassed.months++;
+
+	if (timeCycle.months > 0) return;
+	//std::cout << "A new season has come!" << "\n";
+	timeCycle.months = timeDefaults.months;
+	timePassed.seasons++;
 	
+	switch (season.current)
+	{
+	case Enum::Season::SPRING:
+		season.current = Enum::Season::SUMMER;
+		break;
+	case Enum::Season::SUMMER:
+		season.current = Enum::Season::FALL;
+		break;
+	case Enum::Season::FALL:
+		season.current = Enum::Season::WINTER;
+		break;
+	case Enum::Season::WINTER:
+		//std::cout << "A year has passed!" << "\n";
+		season.current = Enum::Season::SPRING;
+		timePassed.years++;
+		break;
+	}
+
+	//std::cout << "timePassed: " << timePassed.time << "\n";
+	//std::cout << "days: " << static_cast<int>(timePassed.days) << "\n";
+	//std::cout << "weeks: " << static_cast<int>(timePassed.weeks) << "\n";
+	//std::cout << "months: " << static_cast<int>(timePassed.months) << "\n";
+	//std::cout << "seasons: " << static_cast<int>(timePassed.seasons) << "\n";
+	//std::cout << "years: " << static_cast<int>(timePassed.years) << "\n";
 }
 void Update::doButtons
 (

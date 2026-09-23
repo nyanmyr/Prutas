@@ -258,7 +258,7 @@ void playingScene
 	const double TIMECYCLE_MINUTES = 60.0;
 	const double TIMECYCLE_HOURS = 12.0; // whole day
 
-	const double STARTING_TIME = (TIMECYCLE_MINUTES * 3); // equal to 3 AM
+	const double STARTING_TIME = (TIMECYCLE_MINUTES * 3); // equal to 6 AM
 
 	const double DEFAULT_TIME = (TIMECYCLE_MINUTES * TIMECYCLE_HOURS);
 	const uint8_t DEFAULT_DAYS = 7; // per week

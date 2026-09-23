@@ -217,11 +217,11 @@ namespace Component
 	{
 		// can get overflow
 		double time = 0.0;
-		uint8_t days = 0;
-		uint8_t weeks = 0;
-		uint8_t months = 0;
-		uint8_t seasons = 0;
-		uint8_t years = 0;
+		unsigned int days = 0;
+		unsigned int weeks = 0;
+		unsigned int months = 0;
+		unsigned int seasons = 0;
+		unsigned int years = 0;
 	};
 
 	struct TimeDefaults

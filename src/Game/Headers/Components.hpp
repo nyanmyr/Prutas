@@ -195,6 +195,14 @@ namespace Component
 		std::vector<sf::Vector2i> amounts{};
 	};
 
+	struct PlantGrowthRate
+	{
+		double spring = 0.0;
+		double summer = 0.0;
+		double fall = 0.0;
+		double winter = 0.0;
+	};
+
 	struct Delete
 	{
 		double timer = 0.0;

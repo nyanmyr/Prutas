@@ -640,6 +640,12 @@ std::unordered_map<Enum::Item, sf::Vector2i> POTATO_DROP_TABLE
 	}
 };
 const double POTATO_HARVEST_DISTANCE = 30.0;
+
+const double POTATO_SPRING_GROWTH_RATE = 1.0;
+const double POTATO_SUMMER_GROWTH_RATE = 1.5;
+const double POTATO_FALL_GROWTH_RATE = 1.0;
+const double POTATO_WINTER_GROWTH_RATE = 0.0;
+
 #pragma endregion
 
 void Control::plant(const Entity player)
@@ -690,6 +696,11 @@ void Control::plant(const Entity player)
 	std::unordered_map<Enum::Item, sf::Vector2i> dropTable{};
 	double harvestDistance = 0.0;
 
+	double springGrowthRate = 0.0;
+	double summerGrowthRate = 0.0;
+	double fallGrowthRate = 0.0;
+	double winterGrowthRate = 0.0;
+
 	if (inventory.items[inventory.current] == Enum::Item::POTATO)
 	{
 		seedPlantTime = POTATO_SEED_PLANT_TIME;
@@ -720,6 +731,11 @@ void Control::plant(const Entity player)
 
 		dropTable = POTATO_DROP_TABLE;
 		harvestDistance = POTATO_HARVEST_DISTANCE;
+
+		springGrowthRate = POTATO_SPRING_GROWTH_RATE;
+		summerGrowthRate = POTATO_SUMMER_GROWTH_RATE;
+		fallGrowthRate = POTATO_FALL_GROWTH_RATE;
+		winterGrowthRate = POTATO_WINTER_GROWTH_RATE;
 
 		planted = true;
 	}
@@ -763,7 +779,11 @@ void Control::plant(const Entity player)
 			matureTexture
 		},
 		std::move(dropTable),
-		harvestDistance
+		harvestDistance,
+		springGrowthRate,
+		summerGrowthRate,
+		fallGrowthRate,
+		winterGrowthRate
 	);
 }
 
@@ -1140,13 +1160,15 @@ void Update::followCamera
 void Update::grow
 (
 	const Entity loadedTextures,
-	const DeltaTime dt
+	const DeltaTime dt,
+	const Component::Season& season
 )
 {
 	auto& plantTimesArray = systemsNC.getComponentArray<Component::PlantTimes>();
 	auto& plantSizesArray = systemsNC.getComponentArray<Component::PlantSizes>();
 	auto& plantTexturesArray = systemsNC.getComponentArray<Component::PlantTextures>();
 	auto& plantColorsArray = systemsNC.getComponentArray<Component::PlantColors>();
+	auto& plantGrowthRateArray = systemsNC.getComponentArray<Component::PlantGrowthRate>();
 
 	auto& textureArray = systemsNC.getComponentArray<Component::Texture>();
 	auto& spriteArray = systemsNC.getComponentArray<Component::Sprite>();
@@ -1164,11 +1186,14 @@ void Update::grow
 
 	Component::TexturesContainer& containerObj = texturesContainerArray->getData(loadedTextures);
 
+	double growthRate = 0.0;
+
 	for (auto& [entity, plantTimes] : plantTimesArray->getAll())
 	{
 		if (!plantSizesArray->hasData(entity) ||
 			!plantTexturesArray->hasData(entity) ||
 			!plantColorsArray->hasData(entity) ||
+			!plantGrowthRateArray->hasData(entity) ||
 			!textureArray->hasData(entity) ||
 			!spriteArray->hasData(entity) ||
 			!transformArray->hasData(entity) ||
@@ -1179,6 +1204,25 @@ void Update::grow
 		Component::PlantSizes& plantSizes = plantSizesArray->getData(entity);
 		Component::PlantTextures& plantTextures = plantTexturesArray->getData(entity);
 		Component::PlantColors& plantColors = plantColorsArray->getData(entity);
+		const Component::PlantGrowthRate& plantGrowthRate = plantGrowthRateArray->getData(entity);
+
+		switch (season.current)
+		{
+		case Enum::Season::SPRING:
+			growthRate = plantGrowthRate.spring;
+			break;
+		case Enum::Season::SUMMER:
+			growthRate = plantGrowthRate.summer;
+			break;
+		case Enum::Season::FALL:
+			growthRate = plantGrowthRate.fall;
+			break;
+		case Enum::Season::WINTER:
+			growthRate = plantGrowthRate.winter;
+			break;
+		}
+
+		//std::cout << "growthRate: " << growthRate << "\n";
 
 		Component::Texture& texture = textureArray->getData(entity);
 		Component::Sprite& sprite = spriteArray->getData(entity);
@@ -1207,7 +1251,7 @@ void Update::grow
 				//std::cout << "Plant #" << static_cast<int>(entity) << " has grown to seedling stage." << "\n";
 			}
 
-			plantTimes.seed -= dt;
+			plantTimes.seed -= (dt * growthRate);
 		}
 		else if (plantTimes.seedling > 0)
 		{
@@ -1226,7 +1270,7 @@ void Update::grow
 				//std::cout << "Plant #" << static_cast<int>(entity) << " has grown to flowering stage." << "\n";
 			}
 
-			plantTimes.seedling -= dt;
+			plantTimes.seedling -= (dt * growthRate);
 		}
 		else if (plantTimes.flowering > 0)
 		{
@@ -1245,7 +1289,7 @@ void Update::grow
 				//std::cout << "Plant #" << static_cast<int>(entity) << " has grown to mature stage." << "\n";
 			}
 
-			plantTimes.flowering -= dt;
+			plantTimes.flowering -= (dt * growthRate);
 		}
 
 		if (grew)

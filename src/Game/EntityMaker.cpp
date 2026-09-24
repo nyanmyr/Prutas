@@ -557,7 +557,11 @@ Entity makePlant
 	const std::vector<sf::Vector2f> plantSizes,
 	const std::vector<Enum::Texture> plantTextures,
 	const std::unordered_map<Enum::Item, sf::Vector2i>& dropTable,
-	const double harvestDistance
+	const double harvestDistance,
+	const double springGrowthRate,
+	const double summerGrowthRate,
+	const double fallGrowthRate,
+	const double winterGrowthRate
 )
 {
 	// 4 corresponds to the plant stages
@@ -710,6 +714,20 @@ Entity makePlant
 			std::move(amounts)
 		}
 	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::PlantGrowthRate
+		{
+			springGrowthRate,
+			summerGrowthRate,
+			fallGrowthRate,
+			winterGrowthRate
+		}
+	);
+
+
 
 	return entity;
 }

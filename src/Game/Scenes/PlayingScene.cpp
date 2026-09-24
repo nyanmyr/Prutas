@@ -186,7 +186,11 @@ void playingScene
 				{1, 2}
 			}
 		},
-		50.0
+		50.0,
+		1.0,
+		1.0,
+		1.0,
+		1.0
 	);
 
 	Entity cornPlant = makePlant
@@ -229,7 +233,11 @@ void playingScene
 				{1, 1}
 			}
 		},
-		50.0
+		50.0,
+		1.0,
+		1.0,
+		1.0,
+		1.0
 	);
 
 	Entity seller = makeSeller
@@ -259,11 +267,16 @@ void playingScene
 	const double TIMECYCLE_HOURS = 12.0; // whole day
 
 	const double STARTING_TIME = (TIMECYCLE_MINUTES * 3); // equal to 6 AM
+	const Enum::Season STARTING_SEASON = Enum::Season::SPRING;
 
 	const double DEFAULT_TIME = (TIMECYCLE_MINUTES * TIMECYCLE_HOURS);
 	const uint8_t DEFAULT_DAYS = 7; // per week
 	const uint8_t DEFAULT_WEEKS = 4; // per month
 	const uint8_t DEFAULT_MONTHS = 3; // per season
+
+
+	// 4 weeks per month = 28 days per month
+	// 4 seasons * 3 months per season = 12 months per year
 
 	// universal entity
 	Component::TimeCycle timeCycle
@@ -281,7 +294,7 @@ void playingScene
 		DEFAULT_WEEKS, // weeks
 		DEFAULT_MONTHS // months
 	};
-	Component::Season season{};
+	Component::Season season{ STARTING_SEASON };
 
 	// onstart systems
 	Start::setText(font); // font system is limited to one font
@@ -380,7 +393,8 @@ void playingScene
 		Update::grow
 		(
 			loadedTextures,
-			dt
+			dt,
+			season
 		);
 		Update::deleteEntities(dt);
 

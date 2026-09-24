@@ -71,7 +71,8 @@ namespace Update
 	void grow
 	(
 		const Entity loadedTextures,
-		const DeltaTime dt
+		const DeltaTime dt,
+		const Component::Season& season
 	);
 	void deleteEntities(DeltaTime dt);
 }

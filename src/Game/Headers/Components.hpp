@@ -203,6 +203,12 @@ namespace Component
 		double winter = 0.0;
 	};
 
+	struct PlantHealth
+	{
+		double current = 0;
+		double max = 0;
+	};
+
 	struct Delete
 	{
 		double timer = 0.0;

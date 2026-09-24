@@ -51,6 +51,7 @@ void main()
 	nc.registerComponent<Component::PlantColors>();
 	nc.registerComponent<Component::PlantHarvest>();
 	nc.registerComponent<Component::PlantGrowthRate>();
+	nc.registerComponent<Component::PlantHealth>();
 	nc.registerComponent<Component::Delete>();
 	nc.registerComponent<Component::SellArea>();
 

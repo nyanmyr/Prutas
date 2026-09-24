@@ -77,7 +77,9 @@ Entity makePlant
 	const double springGrowthRate,
 	const double summerGrowthRate,
 	const double fallGrowthRate,
-	const double winterGrowthRate
+	const double winterGrowthRate,
+	const double plantHeathCurrent,
+	const double plantHeathMax
 );
 
 Entity makeSeller

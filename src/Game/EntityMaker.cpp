@@ -561,7 +561,9 @@ Entity makePlant
 	const double springGrowthRate,
 	const double summerGrowthRate,
 	const double fallGrowthRate,
-	const double winterGrowthRate
+	const double winterGrowthRate,
+	const double plantHeathCurrent,
+	const double plantHeathMax
 )
 {
 	// 4 corresponds to the plant stages
@@ -727,7 +729,15 @@ Entity makePlant
 		}
 	);
 
-
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::PlantHealth
+		{
+			plantHeathCurrent,
+			plantHeathMax
+		}
+	);
 
 	return entity;
 }

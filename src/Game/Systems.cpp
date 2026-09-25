@@ -1352,6 +1352,47 @@ void Update::grow
 	}
 }
 
+void Update::handlePlantHealth
+(
+	const DeltaTime dt,
+	const Component::Season& season,
+	const Component::TimeDefaults& timeDefaults
+)
+{
+	auto& plantHealthArray = systemsNC.getComponentArray<Component::PlantHealth>();
+	auto& plantHealthGrowthArray = systemsNC.getComponentArray<Component::PlantHealthGrowth>();
+
+	double healthChange = 0.0;
+
+	for (auto& [entity, health] : plantHealthArray->getAll())
+	{
+		if (!plantHealthGrowthArray->hasData(entity)) continue; // practically impossible
+
+		const Component::PlantHealthGrowth& healthGrowth = plantHealthGrowthArray->getData(entity);
+
+		switch (season.current)
+		{
+		case Enum::Season::SPRING:
+			healthChange = healthGrowth.spring;
+			break;
+		case Enum::Season::SUMMER:
+			healthChange = healthGrowth.summer;
+			break;
+		case Enum::Season::FALL:
+			healthChange = healthGrowth.fall;
+			break;
+		case Enum::Season::WINTER:
+			healthChange = healthGrowth.winter;
+			break;
+		}
+
+		// distributes growth evenly throughout entire day time
+		health.current += (healthChange / timeDefaults.time) * dt;
+
+		if (health.current > health.max) health.current = health.max;
+	}
+}
+
 void Update::deleteEntities(DeltaTime dt)
 {
 	std::vector<Entity> deleteQueue{};

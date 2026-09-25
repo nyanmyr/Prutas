@@ -410,6 +410,12 @@ void playingScene
 			dt,
 			season
 		);
+		Update::handlePlantHealth
+		(
+			dt,
+			season,
+			timeDefaults
+		);
 		Update::deleteEntities(dt);
 
 		window.clear();

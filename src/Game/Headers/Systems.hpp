@@ -74,6 +74,12 @@ namespace Update
 		const DeltaTime dt,
 		const Component::Season& season
 	);
+	void handlePlantHealth
+	(
+		const DeltaTime dt,
+		const Component::Season& season,
+		const Component::TimeDefaults& timeDefaults
+	);
 	void deleteEntities(DeltaTime dt);
 }
 

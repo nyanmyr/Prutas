@@ -209,6 +209,14 @@ namespace Component
 		double max = 0;
 	};
 
+	struct PlantHealthGrowth
+	{
+		double spring = 0.0;
+		double summer = 0.0;
+		double fall = 0.0;
+		double winter = 0.0;
+	};
+
 	struct Delete
 	{
 		double timer = 0.0;

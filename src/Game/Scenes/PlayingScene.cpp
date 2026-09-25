@@ -150,6 +150,64 @@ void playingScene
 		}
 	);
 
+	Entity seller = makeSeller
+	(
+		Enum::Texture::TEXTURE_PLACEHOLDER,
+		sf::Vector2f
+		(
+			-100.0,
+			25.0
+		),
+		sf::Vector2f
+		(
+			30.0,
+			40.0
+		),
+		sf::Color
+		(
+			3,
+			86,
+			252
+		),
+		50.0
+	);
+	
+	// per second
+	const double TIMECYCLE_MINUTES = 60.0;
+	const double TIMECYCLE_HOURS = 12.0; // whole day
+
+	const double STARTING_TIME = (TIMECYCLE_MINUTES * 3); // equal to 6 AM
+	const Enum::Season STARTING_SEASON = Enum::Season::SPRING;
+
+	const double DEFAULT_TIME = (TIMECYCLE_MINUTES * TIMECYCLE_HOURS);
+	const uint8_t DEFAULT_DAYS = 7; // per week
+	const uint8_t DEFAULT_WEEKS = 4; // per month
+	const uint8_t DEFAULT_MONTHS = 3; // per season
+
+	// 720 seconds per day
+	// 4 weeks per month = 28 days per month
+	// 4 seasons * 3 months per season = 12 months per year
+
+	// universal entity
+	Component::TimeCycle timeCycle
+	{
+		DEFAULT_TIME, // time (in seconds)
+		DEFAULT_DAYS, // days
+		DEFAULT_WEEKS, // weeks
+		DEFAULT_MONTHS // months
+	};
+	Component::TimePassed timePassed{};
+	Component::TimeDefaults timeDefaults
+	{
+		DEFAULT_TIME, // time (in seconds)
+		DEFAULT_DAYS, // days
+		DEFAULT_WEEKS, // weeks
+		DEFAULT_MONTHS // months
+	};
+	Component::Season season{ STARTING_SEASON };
+
+
+
 	Entity potatoPlant = makePlant
 	(
 		sf::Vector2f
@@ -192,7 +250,11 @@ void playingScene
 		1.0,
 		1.0,
 		100.0,
-		100.0
+		100.0,
+		10 / DEFAULT_TIME,
+		10 / DEFAULT_TIME,
+		10 / DEFAULT_TIME,
+		-(10 / DEFAULT_TIME)
 	);
 
 	Entity cornPlant = makePlant
@@ -241,64 +303,12 @@ void playingScene
 		1.0,
 		1.0,
 		100.0,
-		100.0
+		100.0,
+		10 / DEFAULT_TIME,
+		10 / DEFAULT_TIME,
+		10 / DEFAULT_TIME,
+		-(10 / DEFAULT_TIME)
 	);
-
-	Entity seller = makeSeller
-	(
-		Enum::Texture::TEXTURE_PLACEHOLDER,
-		sf::Vector2f
-		(
-			-100.0,
-			25.0
-		),
-		sf::Vector2f
-		(
-			30.0,
-			40.0
-		),
-		sf::Color
-		(
-			3,
-			86,
-			252
-		),
-		50.0
-	);
-	
-	// per second
-	const double TIMECYCLE_MINUTES = 60.0;
-	const double TIMECYCLE_HOURS = 12.0; // whole day
-
-	const double STARTING_TIME = (TIMECYCLE_MINUTES * 3); // equal to 6 AM
-	const Enum::Season STARTING_SEASON = Enum::Season::SPRING;
-
-	const double DEFAULT_TIME = (TIMECYCLE_MINUTES * TIMECYCLE_HOURS);
-	const uint8_t DEFAULT_DAYS = 7; // per week
-	const uint8_t DEFAULT_WEEKS = 4; // per month
-	const uint8_t DEFAULT_MONTHS = 3; // per season
-
-
-	// 4 weeks per month = 28 days per month
-	// 4 seasons * 3 months per season = 12 months per year
-
-	// universal entity
-	Component::TimeCycle timeCycle
-	{
-		DEFAULT_TIME, // time (in seconds)
-		DEFAULT_DAYS, // days
-		DEFAULT_WEEKS, // weeks
-		DEFAULT_MONTHS // months
-	};
-	Component::TimePassed timePassed{};
-	Component::TimeDefaults timeDefaults
-	{
-		DEFAULT_TIME, // time (in seconds)
-		DEFAULT_DAYS, // days
-		DEFAULT_WEEKS, // weeks
-		DEFAULT_MONTHS // months
-	};
-	Component::Season season{ STARTING_SEASON };
 
 	// onstart systems
 	Start::setText(font); // font system is limited to one font

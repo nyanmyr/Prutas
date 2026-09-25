@@ -648,6 +648,12 @@ const double POTATO_WINTER_GROWTH_RATE = 0.0;
 
 const double POTATO_STARTING_HEALTH = 100.0;
 
+// every day
+const double POTATO_SPRING_HEALTH_GROWTH = 1.0;
+const double POTATO_SUMMER_HEALTH_GROWTH = 1.0;
+const double POTATO_FALL_HEALTH_GROWTH = 1.0;
+const double POTATO_WINTER_HEALTH_GROWTH = 0.0;
+
 #pragma endregion
 
 void Control::plant(const Entity player)
@@ -705,6 +711,11 @@ void Control::plant(const Entity player)
 
 	double health = 0.0;
 
+	double springHealthGrowth = 0.0;
+	double summerHealthGrowth = 0.0;
+	double fallHealthGrowth = 0.0;
+	double winterHealthGrowth = 0.0;
+
 	if (inventory.items[inventory.current] == Enum::Item::POTATO)
 	{
 		seedPlantTime = POTATO_SEED_PLANT_TIME;
@@ -742,6 +753,11 @@ void Control::plant(const Entity player)
 		winterGrowthRate = POTATO_WINTER_GROWTH_RATE;
 
 		health = POTATO_STARTING_HEALTH;
+
+		springHealthGrowth = POTATO_SPRING_HEALTH_GROWTH;
+		summerHealthGrowth = POTATO_SUMMER_HEALTH_GROWTH;
+		fallHealthGrowth = POTATO_FALL_HEALTH_GROWTH;
+		winterHealthGrowth = POTATO_WINTER_HEALTH_GROWTH;
 
 		planted = true;
 	}
@@ -791,7 +807,11 @@ void Control::plant(const Entity player)
 		fallGrowthRate,
 		winterGrowthRate,
 		health, // current / starting
-		health
+		health,
+		springHealthGrowth,
+		summerHealthGrowth,
+		fallHealthGrowth,
+		winterHealthGrowth
 	);
 }
 

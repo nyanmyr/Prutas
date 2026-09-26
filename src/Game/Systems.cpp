@@ -576,18 +576,13 @@ void Control::sellAllItems
 				continue;
 			};
 
-			Component::Price& price = economy.goods[item].price;
+			const Component::Price& price = economy.goods[item].price;
 			Component::Stock& stock = economy.goods[item].stock;
-			Component::PriceGrowth& priceGrowth = economy.goods[item].priceGrowth;
 
 			shillings.amount += price.current;
 			//std::cout << "current: " << price.current << "\n";
 
-			// oughta move this to a seperate function
 			stock.current++;
-			// recalculate new price
-			price.current = price.starting * std::pow((stock.current /stock.starting), priceGrowth.base);
-			//std::cout << "newCurrent: " << price.current << "\n";
 
 			//// adjusts the current selected in the inventory
 			if (playerInventory.current > i) playerInventory.current--;
@@ -1397,6 +1392,15 @@ void Update::handlePlantDeath()
 			entity,
 			Component::Delete{}
 		);
+	}
+}
+
+void Update::economy(Component::Economy& economy)
+{
+	for (auto& [item, good] : economy.goods)
+	{
+		good.price.current = good.price.starting *
+			std::pow((good.stock.current / good.stock.starting), good.priceGrowth.base);
 	}
 }
 

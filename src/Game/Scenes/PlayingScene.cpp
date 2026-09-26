@@ -449,6 +449,7 @@ void playingScene
 			timeDefaults
 		);
 		Update::handlePlantDeath();
+		Update::economy(economy);
 		Update::deleteEntities(dt);
 
 		window.clear();

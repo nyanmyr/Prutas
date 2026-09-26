@@ -85,6 +85,7 @@ namespace Update
 		const Component::TimeDefaults& timeDefaults
 	);
 	void handlePlantDeath();
+	void economy(Component::Economy& economy);
 	void deleteEntities(DeltaTime dt);
 }
 

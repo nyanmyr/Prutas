@@ -206,7 +206,6 @@ namespace Component
 	struct PlantHealth
 	{
 		double current = 0;
-		double max = 0;
 	};
 
 	struct PlantHealthGrowth

@@ -806,7 +806,6 @@ void Control::plant(const Entity player)
 		fallGrowthRate,
 		winterGrowthRate,
 		STARTING_HEALTH, // current / starting
-		STARTING_HEALTH,
 		springHealthGrowth,
 		summerHealthGrowth,
 		fallHealthGrowth,
@@ -1388,7 +1387,7 @@ void Update::handlePlantHealth
 		// distributes growth evenly throughout entire day time
 		health.current += (healthChange / timeDefaults.time) * dt;
 
-		if (health.current > health.max) health.current = health.max;
+		if (health.current > MAX_HEALTH) health.current = MAX_HEALTH;
 	}
 }
 

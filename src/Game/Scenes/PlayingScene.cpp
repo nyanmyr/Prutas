@@ -416,6 +416,7 @@ void playingScene
 			season,
 			timeDefaults
 		);
+		Update::handlePlantDeath();
 		Update::deleteEntities(dt);
 
 		window.clear();

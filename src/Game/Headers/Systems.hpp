@@ -80,6 +80,7 @@ namespace Update
 		const Component::Season& season,
 		const Component::TimeDefaults& timeDefaults
 	);
+	void handlePlantDeath();
 	void deleteEntities(DeltaTime dt);
 }
 

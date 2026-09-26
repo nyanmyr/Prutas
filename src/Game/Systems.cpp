@@ -1393,6 +1393,23 @@ void Update::handlePlantHealth
 	}
 }
 
+void Update::handlePlantDeath()
+{
+	auto& plantHealthArray = systemsNC.getComponentArray<Component::PlantHealth>();
+
+	for (auto& [entity, health] : plantHealthArray->getAll())
+	{
+		std::cout << "Plant: " << health.current << "\n";
+		if (health.current > 0) return;
+
+		systemsNC.addComponent
+		(
+			entity,
+			Component::Delete{}
+		);
+	}
+}
+
 void Update::deleteEntities(DeltaTime dt)
 {
 	std::vector<Entity> deleteQueue{};

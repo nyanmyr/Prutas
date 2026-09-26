@@ -33,18 +33,23 @@ void main()
 	nc.registerComponent<Component::YAxisAdd>();
 	nc.registerComponent<Component::Velocity>();
 	nc.registerComponent<Component::Speed>();
+
 	nc.registerComponent<Component::PlayerController>();
 	nc.registerComponent<Component::PlayerAction>();
+
 	nc.registerComponent<Component::Drag>();
 	nc.registerComponent<Component::Sprite>();
 	nc.registerComponent<Component::Texture>();
 	nc.registerComponent<Component::TexturesContainer>();
 	nc.registerComponent<Component::Color>();
 	nc.registerComponent<Component::Camera>();
+
 	nc.registerComponent<Component::Inventory>();
 	nc.registerComponent<Component::Shillings>();
+
 	nc.registerComponent<Component::Item>();
 	nc.registerComponent<Component::ForageSpot>();
+
 	nc.registerComponent<Component::PlantTimes>();
 	nc.registerComponent<Component::PlantSizes>();
 	nc.registerComponent<Component::PlantTextures>();
@@ -53,6 +58,7 @@ void main()
 	nc.registerComponent<Component::PlantGrowthRate>();
 	nc.registerComponent<Component::PlantHealth>();
 	nc.registerComponent<Component::PlantHealthGrowth>();
+
 	nc.registerComponent<Component::Delete>();
 	nc.registerComponent<Component::SellArea>();
 

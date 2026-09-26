@@ -138,13 +138,14 @@ namespace Component
 
 	struct Price
 	{
+		int starting = 0;
 		int current = 0;
 	};
 
 	struct Stock
 	{
-		int current = 0;
 		int starting = 0;
+		int current = 0;
 	};
 
 	struct PriceGrowth

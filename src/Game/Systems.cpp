@@ -525,7 +525,11 @@ const int SUNFLOWER_SEED_SELL_PRICE = 10;
 const int SUNFLOWER_SELL_PRICE = 10;
 #pragma endregion
 
-void Control::sellAllItems(const Entity player)
+void Control::sellAllItems
+(
+	const Entity player,
+	Component::Economy& economy
+)
 {
 	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
 	auto& inventoryArray = systemsNC.getComponentArray<Component::Inventory>();
@@ -559,49 +563,37 @@ void Control::sellAllItems(const Entity player)
 
 		if (distance > sellArea.distance) continue;
 
-		playerInventory.current = 0;
+		// this is where the non-sellable items are moved to
+		std::vector<Enum::Item> newInventory{};
 
-		for (Enum::Item item : playerInventory.items)
+		for (size_t i = 0; i < playerInventory.items.size(); ++i)
 		{
-			switch (item)
+			Enum::Item item = playerInventory.items[i];
+
+			if (economy.goods.find(item) == economy.goods.end())
 			{
-				case Enum::Item::POTATO:
-					shillings.amount += POTATO_SELL_PRICE;
-					break;
-				case Enum::Item::CARROT:
-					shillings.amount += CARROT_SELL_PRICE;
-					break;
-				case Enum::Item::WHEAT_SEED:
-					shillings.amount += WHEAT_SEED_SELL_PRICE;
-					break;
-				case Enum::Item::WHEAT:
-					shillings.amount += WHEAT_SELL_PRICE;
-					break;
-				case Enum::Item::BARLEY_SEED:
-					shillings.amount += BARLEY_SEED_SELL_PRICE;
-					break;
-				case Enum::Item::BARLEY:
-					shillings.amount += BARLEY_SELL_PRICE;
-					break;
-				case Enum::Item::CORN_SEED:
-					shillings.amount += CORN_SEED_SELL_PRICE;
-					break;
-				case Enum::Item::CORN:
-					shillings.amount += CORN_SELL_PRICE;
-					break;
-				case Enum::Item::SUNFLOWER_SEED:
-					shillings.amount += SUNFLOWER_SEED_SELL_PRICE;
-					break;
-				case Enum::Item::SUNFLOWER:
-					shillings.amount += SUNFLOWER_SELL_PRICE;
-					break;
-				default:
-					shillings.amount += 0;
-					break;
-			}
+				newInventory.push_back(item);
+				continue;
+			};
+
+			Component::Price& price = economy.goods[item].price;
+			Component::Stock& stock = economy.goods[item].stock;
+			Component::PriceGrowth& priceGrowth = economy.goods[item].priceGrowth;
+
+			shillings.amount += price.current;
+			//std::cout << "current: " << price.current << "\n";
+
+			// oughta move this to a seperate function
+			stock.current++;
+			// recalculate new price
+			price.current = price.starting * std::pow((stock.current /stock.starting), priceGrowth.base);
+			//std::cout << "newCurrent: " << price.current << "\n";
+
+			//// adjusts the current selected in the inventory
+			if (playerInventory.current > i) playerInventory.current--;
 		}
 
-		playerInventory.items.clear();
+		playerInventory.items = newInventory;
 	}
 }
 

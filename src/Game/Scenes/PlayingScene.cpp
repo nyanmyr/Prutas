@@ -241,7 +241,7 @@ void playingScene
 		{
 			{
 				Enum::Item::POTATO,
-				{1, 2}
+				{2, 3}
 			}
 		},
 		50.0,
@@ -308,6 +308,36 @@ void playingScene
 		-(10 / DEFAULT_TIME)
 	);
 
+	std::unordered_map<Enum::Item, Component::Good> goods
+	{
+		{
+			Enum::Item::POTATO,
+			Component::Good
+			{
+				Component::Price
+				{
+					50, // starting
+					50, // current
+				},
+				Component::Stock
+				{
+					10, // starting
+					10 // current
+				},
+				Component::PriceGrowth
+				{
+					0.1
+				}
+			}
+		}
+	};
+
+	// universal entity
+	Component::Economy economy
+	{
+		std::move(goods)
+	};
+
 	// onstart systems
 	Start::setText(font); // font system is limited to one font
 	Start::setTextOrigin();
@@ -369,7 +399,11 @@ void playingScene
 
 				if (keyReleased->scancode == sf::Keyboard::Scancode::Num1)
 				{
-					Control::sellAllItems(player);
+					Control::sellAllItems
+					(
+						player,
+						economy
+					);
 				}
 
 				// for debugging

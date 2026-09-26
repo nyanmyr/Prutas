@@ -605,6 +605,11 @@ void Control::sellAllItems(const Entity player)
 	}
 }
 
+#pragma region PLANT_CONSTANTS
+const double MAX_HEALTH = 100.0;
+const double STARTING_HEALTH = MAX_HEALTH;
+#pragma endregion
+
 #pragma region POTATO_PLANT_CONSTANTS
 const double POTATO_SEED_PLANT_TIME = 1.0;
 const double POTATO_SEEDLING_PLANT_TIME = 1.0;
@@ -645,8 +650,6 @@ const double POTATO_SPRING_GROWTH_RATE = 1.0;
 const double POTATO_SUMMER_GROWTH_RATE = 1.5;
 const double POTATO_FALL_GROWTH_RATE = 1.0;
 const double POTATO_WINTER_GROWTH_RATE = 0.0;
-
-const double POTATO_STARTING_HEALTH = 100.0;
 
 // every day
 const double POTATO_SPRING_HEALTH_GROWTH = 1.0;
@@ -709,8 +712,6 @@ void Control::plant(const Entity player)
 	double fallGrowthRate = 0.0;
 	double winterGrowthRate = 0.0;
 
-	double health = 0.0;
-
 	double springHealthGrowth = 0.0;
 	double summerHealthGrowth = 0.0;
 	double fallHealthGrowth = 0.0;
@@ -751,8 +752,6 @@ void Control::plant(const Entity player)
 		summerGrowthRate = POTATO_SUMMER_GROWTH_RATE;
 		fallGrowthRate = POTATO_FALL_GROWTH_RATE;
 		winterGrowthRate = POTATO_WINTER_GROWTH_RATE;
-
-		health = POTATO_STARTING_HEALTH;
 
 		springHealthGrowth = POTATO_SPRING_HEALTH_GROWTH;
 		summerHealthGrowth = POTATO_SUMMER_HEALTH_GROWTH;
@@ -806,8 +805,8 @@ void Control::plant(const Entity player)
 		summerGrowthRate,
 		fallGrowthRate,
 		winterGrowthRate,
-		health, // current / starting
-		health,
+		STARTING_HEALTH, // current / starting
+		STARTING_HEALTH,
 		springHealthGrowth,
 		summerHealthGrowth,
 		fallHealthGrowth,
@@ -1399,7 +1398,7 @@ void Update::handlePlantDeath()
 
 	for (auto& [entity, health] : plantHealthArray->getAll())
 	{
-		std::cout << "Plant: " << health.current << "\n";
+		//std::cout << "Plant: " << health.current << "\n";
 		if (health.current > 0) return;
 
 		systemsNC.addComponent

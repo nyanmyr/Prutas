@@ -136,6 +136,34 @@ namespace Component
 		int amount = 0;
 	};
 
+	struct Price
+	{
+		int current = 0;
+	};
+
+	struct Stock
+	{
+		int current = 0;
+		int starting = 0;
+	};
+
+	struct PriceGrowth
+	{
+		double base = 0.0;
+	};
+
+	struct Good
+	{
+		Price price{};
+		Stock stock{};
+		PriceGrowth priceGrowth{};
+	};
+
+	struct Economy
+	{
+		std::unordered_map<Enum::Item, Component::Good> goods;
+	};
+
 	struct Item
 	{
 		Enum::Item type = Enum::Item::NULL_ITEM;

@@ -512,19 +512,6 @@ void Control::inventorySelectRight(const Entity player)
 	// std::cout << "New current: " << static_cast<int>(inventory.current) << "\n";
 }
 
-#pragma region ITEM_SELL_PRICES
-const int POTATO_SELL_PRICE = 10;
-const int CARROT_SELL_PRICE = 10;
-const int WHEAT_SEED_SELL_PRICE = 10;
-const int WHEAT_SELL_PRICE = 10;
-const int BARLEY_SEED_SELL_PRICE = 10;
-const int BARLEY_SELL_PRICE = 10;
-const int CORN_SEED_SELL_PRICE = 10;
-const int CORN_SELL_PRICE = 10;
-const int SUNFLOWER_SEED_SELL_PRICE = 10;
-const int SUNFLOWER_SELL_PRICE = 10;
-#pragma endregion
-
 void Control::sellAllItems
 (
 	const Entity player,

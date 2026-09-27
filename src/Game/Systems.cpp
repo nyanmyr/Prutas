@@ -69,6 +69,17 @@ void Start::setTextOrigin()
 		);
 	}
 }
+void Start::setUIZIndex(const sf::RenderWindow& window)
+{
+	auto& UIArray = systemsNC.getComponentArray<Component::UI>();
+
+	int windowYAdd = window.getDefaultView().getSize().y;
+
+	for (auto& [entity, ui] : UIArray->getAll())
+	{
+		ui.yAxisAdd += windowYAdd;
+	}
+}
 void Start::setSpriteOrigin()
 {
 	auto& originArray = systemsNC.getComponentArray<Component::Origin>();
@@ -1212,6 +1223,22 @@ void Update::followCamera
 	window.setView(view);
 }
 
+void Update::moveUI(const sf::RenderWindow& window)
+{
+	auto& UIArray = systemsNC.getComponentArray<Component::UI>();
+	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
+
+	sf::View view = window.getView();
+
+	for (auto& [entity, ui] : UIArray->getAll())
+	{
+		if (!positionArray->hasData(entity)) continue;
+
+		Component::Position& pos = positionArray->getData(entity);
+		pos.x = view.getCenter().x;
+	}
+}
+
 void Update::grow
 (
 	const Entity loadedTextures,
@@ -1507,6 +1534,7 @@ void Render::doZIndex(std::queue<Entity>& renderQueue)
 {
 	auto& zIndexArray = systemsNC.getComponentArray<Component::ZIndex>();
 	auto& yAxisAddArray = systemsNC.getComponentArray<Component::YAxisAdd>();
+	auto& UIArray = systemsNC.getComponentArray<Component::UI>();
 
 	std::vector<std::pair<int, Entity>> renderVector;
 	for (auto& [entity, zIndexObj] : zIndexArray->getAll())
@@ -1520,6 +1548,12 @@ void Render::doZIndex(std::queue<Entity>& renderQueue)
 		{
 			Component::YAxisAdd yAxisAdd = yAxisAddArray->getData(entity);
 			finalIndex += yAxisAdd.amount;
+		}
+
+		if (UIArray->hasData(entity))
+		{
+			Component::UI ui = UIArray->getData(entity);
+			finalIndex += ui.yAxisAdd;
 		}
 
 		renderVector.emplace_back(finalIndex, entity);

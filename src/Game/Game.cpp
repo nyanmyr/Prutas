@@ -29,8 +29,11 @@ void main()
 	nc.registerComponent<Component::Button>();
 	nc.registerComponent<Component::Text>();
 	nc.registerComponent<Component::NextScene>();
+
 	nc.registerComponent<Component::ZIndex>();
 	nc.registerComponent<Component::YAxisAdd>();
+	nc.registerComponent<Component::UI>();
+
 	nc.registerComponent<Component::Velocity>();
 	nc.registerComponent<Component::Speed>();
 

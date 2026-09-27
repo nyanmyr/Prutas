@@ -9,6 +9,7 @@ namespace Start
 {
 	void setText(sf::Font& font);
 	void setTextOrigin();
+	void setUIZIndex(const sf::RenderWindow& window);
 	void setSpriteOrigin();
 	void loadTextures(const Entity loadedTextures);
 	void loadSprites(const Entity loadedTextures);
@@ -73,6 +74,7 @@ namespace Update
 		const DeltaTime dt,
 		sf::RenderWindow& window
 	);
+	void moveUI(const sf::RenderWindow& window);
 	void grow
 	(
 		const Entity loadedTextures,

@@ -360,9 +360,28 @@ void playingScene
 		std::move(goods)
 	};
 
+	const int UI_BOX_MARGINS = 100;
+
+	Entity shopUIBox = makeUIBox
+	(
+		Enum::Texture::TEXTURE_PLACEHOLDER,
+		sf::Vector2f
+		(
+			0,
+			0
+		),
+		sf::Vector2f
+		(
+			window.getDefaultView().getSize().x - UI_BOX_MARGINS,
+			window.getDefaultView().getSize().y - UI_BOX_MARGINS
+		),
+		sf::Color::White
+	);
+
 	// onstart systems
 	Start::setText(font); // font system is limited to one font
 	Start::setTextOrigin();
+	Start::setUIZIndex(window);
 
 	while (window.isOpen())
 	{
@@ -460,6 +479,7 @@ void playingScene
 			dt,
 			window
 		);
+		Update::moveUI(window);
 		Update::grow
 		(
 			loadedTextures,

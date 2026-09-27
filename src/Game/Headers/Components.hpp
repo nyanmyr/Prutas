@@ -66,6 +66,11 @@ namespace Component
 		bool enabled = true;
 	};
 
+	struct UI
+	{
+		int yAxisAdd = 0;
+	};
+
 	struct Velocity
 	{
 		double minX = 0.0;

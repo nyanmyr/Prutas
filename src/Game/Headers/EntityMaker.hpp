@@ -103,4 +103,12 @@ Entity makeShop
 	const double shopDistance
 );
 
+Entity makeUIBox
+(
+	const Enum::Texture texture,
+	const sf::Vector2f pos,
+	const sf::Vector2f size,
+	const sf::Color col
+);
+
 #endif

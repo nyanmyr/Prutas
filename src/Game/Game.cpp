@@ -60,7 +60,9 @@ void main()
 	nc.registerComponent<Component::PlantHealthGrowth>();
 
 	nc.registerComponent<Component::Delete>();
+
 	nc.registerComponent<Component::SellArea>();
+	nc.registerComponent<Component::BuyArea>();
 
 	sf::Font font;
 	if (!font.openFromFile(FONT_FILEPATH))

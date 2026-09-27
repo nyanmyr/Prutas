@@ -255,6 +255,11 @@ namespace Component
 		double distance = 0.0;
 	};
 
+	struct BuyArea
+	{
+		double distance = 0.0;
+	};
+
 	struct TimeCycle
 	{
 		double time = 0.0;

@@ -33,7 +33,8 @@ namespace Enum
 	enum class PlayerState
 	{
 		IDLE,
-		OPENED_INVENTORY
+		OPENED_INVENTORY,
+		OPENED_SHOP
 	};
 
 	enum class Season

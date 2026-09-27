@@ -94,4 +94,13 @@ Entity makeSeller
 	const double sellDistance
 );
 
+Entity makeShop
+(
+	const Enum::Texture texture,
+	const sf::Vector2f pos,
+	const sf::Vector2f size,
+	const sf::Color col,
+	const double shopDistance
+);
+
 #endif

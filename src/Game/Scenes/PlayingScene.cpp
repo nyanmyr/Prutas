@@ -171,6 +171,28 @@ void playingScene
 		),
 		50.0
 	);
+
+	Entity shop = makeShop
+	(
+		Enum::Texture::TEXTURE_PLACEHOLDER,
+		sf::Vector2f
+		(
+			100.0,
+			25.0
+		),
+		sf::Vector2f
+		(
+			30.0,
+			40.0
+		),
+		sf::Color
+		(
+			252,
+			169,
+			3
+		),
+		50.0
+	);
 	
 	// per second
 	const double TIMECYCLE_MINUTES = 60.0;
@@ -379,6 +401,8 @@ void playingScene
 
 				if (keyReleased->scancode == sf::Keyboard::Scancode::R)
 				{
+					// the order is important here
+					Control::openShop(player);
 					Control::openInventory(player);
 				}
 

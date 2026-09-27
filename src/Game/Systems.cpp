@@ -446,6 +446,58 @@ void Control::harvest(const Entity player)
 		);
 	}
 }
+void Control::openShop(const Entity player)
+{
+	auto& buyAreaArray = systemsNC.getComponentArray<Component::BuyArea>();
+	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
+
+	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::PlayerAction>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::Velocity>()->hasData(player) ||
+		!positionArray->hasData(player)) return;
+
+	Component::PlayerController& playerController = systemsNC.getComponentArray<Component::PlayerController>()->getData(player);
+	Component::PlayerAction& playerAction = systemsNC.getComponentArray<Component::PlayerAction>()->getData(player);
+	Component::Velocity& velocity = systemsNC.getComponentArray<Component::Velocity>()->getData(player);
+	const Component::Position playerPos = positionArray->getData(player);
+
+	if (playerAction.state != Enum::PlayerState::IDLE &&
+		playerAction.state != Enum::PlayerState::OPENED_SHOP) return;
+
+	bool entered = false;
+
+	for (auto& [entity, buyArea] : buyAreaArray->getAll())
+	{
+		if (!positionArray->hasData(entity)) continue;
+
+		const Component::Position& buyAreaPos = positionArray->getData(entity);
+
+		double distance = [](Component::Position a, Component::Position b)
+			{
+				return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
+			}
+		(playerPos, buyAreaPos);
+
+		if (distance > buyArea.distance) continue;
+		entered = true;
+		break;
+	}
+
+	if (!entered) return;
+
+	// toggles it on or off
+	playerController.enabled = !playerController.enabled;
+
+	playerAction.state = playerController.enabled ?
+		Enum::PlayerState::IDLE : Enum::PlayerState::OPENED_SHOP;
+
+	if (!playerController.enabled)
+	{
+		velocity.x = velocity.x * 0.1;
+		velocity.y = velocity.y * 0.1;
+	}
+
+}
 void Control::openInventory(const Entity player)
 {
 	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
@@ -457,6 +509,9 @@ void Control::openInventory(const Entity player)
 	Component::PlayerAction& playerAction = systemsNC.getComponentArray<Component::PlayerAction>()->getData(player);
 	Component::Velocity& velocity = systemsNC.getComponentArray<Component::Velocity>()->getData(player);
 	Component::Inventory& inventory = systemsNC.getComponentArray<Component::Inventory>()->getData(player);
+
+	if (playerAction.state != Enum::PlayerState::IDLE &&
+		playerAction.state != Enum::PlayerState::OPENED_INVENTORY) return;
 
 	if (inventory.items.empty())
 	{

@@ -464,6 +464,14 @@ void Control::harvest(const Entity player)
 	}
 }
 
+const double BRAKE_AMOUNT = 0.1;
+
+static void brake(Component::Velocity& velocity)
+{
+	velocity.x *= BRAKE_AMOUNT;
+	velocity.y *= BRAKE_AMOUNT;
+};
+
 bool Control::idle(const Entity player)
 {
 	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
@@ -524,11 +532,7 @@ void Control::openShop(const Entity player)
 
 	playerAction.state = Enum::PlayerState::OPENED_SHOP;
 
-	if (!playerController.enabled)
-	{
-		velocity.x = velocity.x * 0.1;
-		velocity.y = velocity.y * 0.1;
-	}
+	brake(velocity);
 }
 void Control::openInventory(const Entity player)
 {
@@ -556,11 +560,7 @@ void Control::openInventory(const Entity player)
 
 	playerAction.state = Enum::PlayerState::OPENED_INVENTORY;
 
-	if (!playerController.enabled)
-	{
-		velocity.x = velocity.x * 0.1;
-		velocity.y = velocity.y * 0.1;
-	}
+	brake(velocity);
 
 	//std::cout << "Currently Selected: " << static_cast<int>(inventory.items[inventory.current]) << "\n";
 	//std::cout << "Inventory Size: " << static_cast<int>(inventory.items.size()) << "\n";

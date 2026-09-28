@@ -10,7 +10,6 @@ namespace Start
 	void setText(sf::Font& font);
 	void setTextOrigin();
 	void setUIZIndex(const sf::RenderWindow& window);
-	void setUIOriginalScales();
 	void setSpriteOrigin();
 	void loadTextures(const Entity loadedTextures);
 	void loadSprites(const Entity loadedTextures);

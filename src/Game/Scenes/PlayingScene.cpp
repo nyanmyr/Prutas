@@ -390,7 +390,6 @@ void playingScene
 	Start::setText(font); // font system is limited to one font
 	Start::setTextOrigin();
 	Start::setUIZIndex(window);
-	Start::setUIOriginalScales();
 
 	while (window.isOpen())
 	{

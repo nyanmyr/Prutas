@@ -80,23 +80,6 @@ void Start::setUIZIndex(const sf::RenderWindow& window)
 		ui.yAxisAdd += windowYAdd;
 	}
 }
-void Start::setUIOriginalScales()
-{
-	auto& UIArray = systemsNC.getComponentArray<Component::UI>();
-	auto& UIAnimationArray = systemsNC.getComponentArray<Component::UIAnimation>();
-	auto& spriteArray = systemsNC.getComponentArray<Component::Sprite>();
-
-	for (auto& [entity, ui] : UIArray->getAll())
-	{
-		Component::UIAnimation& uiAnimation = UIAnimationArray->getData(entity);
-		const Component::Sprite& sprite = spriteArray->getData(entity);
-
-		uiAnimation.originalScale = sprite.body->getScale();
-
-		//std::cout << "originalScaleX: " << uiAnimation.originalScale.x << "\n";
-		//std::cout << "originalScaleY: " << uiAnimation.originalScale.y << "\n";
-	}
-}
 void Start::setSpriteOrigin()
 {
 	auto& originArray = systemsNC.getComponentArray<Component::Origin>();
@@ -120,6 +103,8 @@ void Start::setSpriteOrigin()
 				origin.offsetY / sprite.body->getScale().y
 			)
 		);
+
+		origin.set = true;
 	}
 }
 void Start::loadTextures(const Entity loadedTextures)
@@ -883,9 +868,11 @@ void Update::playUIAnimation(DeltaTime dt)
 	auto& UIArray = systemsNC.getComponentArray<Component::UI>();
 	auto& spriteArray = systemsNC.getComponentArray<Component::Sprite>();
 	auto& originArray = systemsNC.getComponentArray<Component::Origin>();
+	auto& transformArray = systemsNC.getComponentArray<Component::Transform>();
 
 	for (auto& [entity, uiAnimation] : UIAnimationArray->getAll())
 	{
+		Component::Transform& transform = transformArray->getData(entity);
 		Component::Origin& origin = originArray->getData(entity);
 		Component::Sprite& sprite = spriteArray->getData(entity);
 		const Component::UI& ui = UIArray->getData(entity);
@@ -917,10 +904,16 @@ void Update::playUIAnimation(DeltaTime dt)
 
 		uiAnimation.time -= dt;
 
-		uiAnimation.newScale.x = uiAnimation.originalScale.x * uiAnimation.scalingFactor;
-		uiAnimation.newScale.y = uiAnimation.originalScale.y * uiAnimation.scalingFactor;
+		sprite.body->setScale
+		(
+			sf::Vector2f
+			(
+				uiAnimation.scalingFactor * (transform.width / sprite.body->getTexture().getSize().x),
+				uiAnimation.scalingFactor * (transform.height / sprite.body->getTexture().getSize().y)
+			)
+		);
 
-		sprite.body->setScale(uiAnimation.newScale);
+		origin.set = false;
 
 		//std::cout << "offsetX: " << originObj.offsetX << "\n";
 		//std::cout << "sizeX: " << sprite.body->getGlobalBounds().size.x << "\n";

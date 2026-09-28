@@ -79,9 +79,6 @@ namespace Component
 		double time = 0.0;
 		double progress = 0.0;
 		double scalingFactor = 0.0;
-
-		sf::Vector2f originalScale{};
-		sf::Vector2f newScale{};
 	};
 
 	struct Velocity

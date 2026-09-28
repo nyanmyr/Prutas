@@ -102,21 +102,22 @@ void Start::setSpriteOrigin()
 	auto& originArray = systemsNC.getComponentArray<Component::Origin>();
 	auto& spriteArray = systemsNC.getComponentArray<Component::Sprite>();
 
-	for (auto& [entity, spriteObj] : spriteArray->getAll())
+	for (auto& [entity, origin] : originArray->getAll())
 	{
-		if (!originArray->hasData(entity))
+		if (!spriteArray->hasData(entity) ||
+			origin.set)
 		{
 			continue;
 		}
 
-		Component::Origin& originObj = originArray->getData(entity);
+		Component::Sprite& sprite = spriteArray->getData(entity);
 
-		spriteObj.body->setOrigin
+		sprite.body->setOrigin
 		(
 			sf::Vector2f
 			(
-				originObj.offsetX / spriteObj.body->getScale().x,
-				originObj.offsetY / spriteObj.body->getScale().y
+				origin.offsetX / sprite.body->getScale().x,
+				origin.offsetY / sprite.body->getScale().y
 			)
 		);
 	}
@@ -151,7 +152,8 @@ void Start::loadSprites(const Entity loadedTextures)
 	for (auto& [entity, spriteObj] : spriteArray->getAll())
 	{
 		if (!transformArray->hasData(entity) ||
-			!textureArray->hasData(entity))
+			!textureArray->hasData(entity) ||
+			spriteObj.loaded)
 		{
 			continue;
 		}
@@ -168,6 +170,8 @@ void Start::loadSprites(const Entity loadedTextures)
 				transformObj.height / spriteObj.body->getGlobalBounds().size.y
 			)
 		);
+
+		spriteObj.loaded = true;
 	}
 }
 void Start::setColor()
@@ -882,7 +886,7 @@ void Update::playUIAnimation(DeltaTime dt)
 
 	for (auto& [entity, uiAnimation] : UIAnimationArray->getAll())
 	{
-		Component::Origin& originObj = originArray->getData(entity);
+		Component::Origin& origin = originArray->getData(entity);
 		Component::Sprite& sprite = spriteArray->getData(entity);
 		const Component::UI& ui = UIArray->getData(entity);
 
@@ -921,9 +925,6 @@ void Update::playUIAnimation(DeltaTime dt)
 		//std::cout << "offsetX: " << originObj.offsetX << "\n";
 		//std::cout << "sizeX: " << sprite.body->getGlobalBounds().size.x << "\n";
 		//std::cout << "newOffsetX: " << sprite.body->getGlobalBounds().size.x / 2.0 << "\n";
-
-		//originObj.offsetX = sprite.body->getGlobalBounds().size.x / 2.0;
-		//originObj.offsetY = sprite.body->getGlobalBounds().size.y / 2.0;
 	}
 }
 

@@ -28,6 +28,7 @@ namespace Component
 	{
 		double offsetX = 0.0;
 		double offsetY = 0.0;
+		bool set = false;
 	};
 
 	struct Button
@@ -118,6 +119,7 @@ namespace Component
 	struct Sprite
 	{
 		std::optional<sf::Sprite> body{};
+		bool loaded = false;
 	};
 
 	struct Texture

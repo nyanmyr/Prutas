@@ -375,17 +375,28 @@ void playingScene
 			window.getDefaultView().getSize().x - UI_BOX_MARGINS,
 			window.getDefaultView().getSize().y - UI_BOX_MARGINS
 		),
-		sf::Color::White
+		sf::Color::White,
+		2
 	);
 
 	// onstart systems
+
+	// temporary
+	Start::loadTextures(loadedTextures);
+	Start::loadSprites(loadedTextures);
+	Start::setSpriteOrigin();
+	Start::setColor();
+
 	Start::setText(font); // font system is limited to one font
 	Start::setTextOrigin();
 	Start::setUIZIndex(window);
+	Start::setUIOriginalScales();
 
 	while (window.isOpen())
 	{
 		DeltaTime dt = clock.restart().asSeconds();
+
+		Update::playUIAnimation(dt);
 
 		Update::timeCycle
 		(
@@ -397,7 +408,6 @@ void playingScene
 		);
 
 		// convert to Update methods
-		Start::loadTextures(loadedTextures);
 		Start::loadSprites(loadedTextures);
 		Start::setSpriteOrigin();
 		Start::setColor();

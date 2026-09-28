@@ -32,7 +32,9 @@ void main()
 
 	nc.registerComponent<Component::ZIndex>();
 	nc.registerComponent<Component::YAxisAdd>();
+
 	nc.registerComponent<Component::UI>();
+	nc.registerComponent<Component::UIAnimation >();
 
 	nc.registerComponent<Component::Velocity>();
 	nc.registerComponent<Component::Speed>();

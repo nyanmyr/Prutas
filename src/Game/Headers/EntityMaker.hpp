@@ -108,7 +108,8 @@ Entity makeUIBox
 	const Enum::Texture texture,
 	const sf::Vector2f pos,
 	const sf::Vector2f size,
-	const sf::Color col
+	const sf::Color col,
+	const double animationDuration
 );
 
 #endif

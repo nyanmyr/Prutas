@@ -80,6 +80,23 @@ void Start::setUIZIndex(const sf::RenderWindow& window)
 		ui.yAxisAdd += windowYAdd;
 	}
 }
+void Start::setUIOriginalScales()
+{
+	auto& UIArray = systemsNC.getComponentArray<Component::UI>();
+	auto& UIAnimationArray = systemsNC.getComponentArray<Component::UIAnimation>();
+	auto& spriteArray = systemsNC.getComponentArray<Component::Sprite>();
+
+	for (auto& [entity, ui] : UIArray->getAll())
+	{
+		Component::UIAnimation& uiAnimation = UIAnimationArray->getData(entity);
+		const Component::Sprite& sprite = spriteArray->getData(entity);
+
+		uiAnimation.originalScale = sprite.body->getScale();
+
+		//std::cout << "originalScaleX: " << uiAnimation.originalScale.x << "\n";
+		//std::cout << "originalScaleY: " << uiAnimation.originalScale.y << "\n";
+	}
+}
 void Start::setSpriteOrigin()
 {
 	auto& originArray = systemsNC.getComponentArray<Component::Origin>();
@@ -856,6 +873,60 @@ void Control::plant(const Entity player)
 // -------------------------------------------------------
 // update systems
 // -------------------------------------------------------
+void Update::playUIAnimation(DeltaTime dt)
+{
+	auto& UIAnimationArray = systemsNC.getComponentArray<Component::UIAnimation>();
+	auto& UIArray = systemsNC.getComponentArray<Component::UI>();
+	auto& spriteArray = systemsNC.getComponentArray<Component::Sprite>();
+	auto& originArray = systemsNC.getComponentArray<Component::Origin>();
+
+	for (auto& [entity, uiAnimation] : UIAnimationArray->getAll())
+	{
+		Component::Origin& originObj = originArray->getData(entity);
+		Component::Sprite& sprite = spriteArray->getData(entity);
+		const Component::UI& ui = UIArray->getData(entity);
+
+		if (uiAnimation.time <= 0) continue;
+
+		uiAnimation.progress = [](double target, double min, double max)
+			{
+				return (target - min) / (max - min);
+			}
+		(uiAnimation.time, 0.0, uiAnimation.duration);
+
+		//std::cout << "test: " << uiAnimation.progress << "\n";
+
+		// ease out elastic lambda
+		uiAnimation.scalingFactor = [](double progress) -> double
+			{
+				static const double c4 = (2 * std::acos(-1.0)) / 3;
+
+				if (progress <= 0) return 0.0;
+				else if (progress >= 1) return 1.0;
+
+				return std::pow(2.0, -10.0 * progress) *
+					std::sin((progress * 10.0 - 0.75) * c4) + 1.0;
+			}
+		(ui.opened ? uiAnimation.progress : 1.0 - uiAnimation.progress);
+
+		//std::cout << "test: " << uiAnimation.scalingFactor << "\n";
+
+		uiAnimation.time -= dt;
+
+		uiAnimation.newScale.x = uiAnimation.originalScale.x * uiAnimation.scalingFactor;
+		uiAnimation.newScale.y = uiAnimation.originalScale.y * uiAnimation.scalingFactor;
+
+		sprite.body->setScale(uiAnimation.newScale);
+
+		//std::cout << "offsetX: " << originObj.offsetX << "\n";
+		//std::cout << "sizeX: " << sprite.body->getGlobalBounds().size.x << "\n";
+		//std::cout << "newOffsetX: " << sprite.body->getGlobalBounds().size.x / 2.0 << "\n";
+
+		//originObj.offsetX = sprite.body->getGlobalBounds().size.x / 2.0;
+		//originObj.offsetY = sprite.body->getGlobalBounds().size.y / 2.0;
+	}
+}
+
 const double TIME_SPEED_MULTIPLIER_DEBUG = 2.0;
 
 void Update::timeCycle

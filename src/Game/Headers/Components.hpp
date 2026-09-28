@@ -69,6 +69,18 @@ namespace Component
 	struct UI
 	{
 		int yAxisAdd = 0;
+		bool opened = false;
+	};
+
+	struct UIAnimation
+	{
+		double duration = 0.0;
+		double time = 0.0;
+		double progress = 0.0;
+		double scalingFactor = 0.0;
+
+		sf::Vector2f originalScale{};
+		sf::Vector2f newScale{};
 	};
 
 	struct Velocity

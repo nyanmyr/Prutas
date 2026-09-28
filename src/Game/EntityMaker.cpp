@@ -937,7 +937,8 @@ Entity makeUIBox
 	const Enum::Texture texture,
 	const sf::Vector2f pos,
 	const sf::Vector2f size,
-	const sf::Color col
+	const sf::Color col,
+	const double animationDuration
 )
 {
 	Entity entity = entityMakerNC.createEntity();
@@ -1002,6 +1003,12 @@ Entity makeUIBox
 	(
 		entity,
 		Component::UI{}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::UIAnimation{ animationDuration, animationDuration } // temp
 	);
 
 	return entity;

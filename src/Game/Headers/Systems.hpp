@@ -31,6 +31,7 @@ namespace Control
 	void pickup(const Entity player);
 	void forage(const Entity player);
 	void harvest(const Entity player);
+	bool idle(const Entity player);
 	void openShop(const Entity player);
 	void openInventory(const Entity player);
 	void inventorySelectLeft(const Entity player);

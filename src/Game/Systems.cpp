@@ -463,6 +463,24 @@ void Control::harvest(const Entity player)
 		);
 	}
 }
+
+bool Control::idle(const Entity player)
+{
+	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
+		!systemsNC.getComponentArray<Component::PlayerAction>()->hasData(player))
+		return false;
+
+	Component::PlayerController& playerController = systemsNC.getComponentArray<Component::PlayerController>()->getData(player);
+	Component::PlayerAction& playerAction = systemsNC.getComponentArray<Component::PlayerAction>()->getData(player);
+
+	if (playerAction.state == Enum::PlayerState::IDLE) return false;
+
+	playerController.enabled = true;
+	playerAction.state = Enum::PlayerState::IDLE;
+
+	return true;
+}
+
 void Control::openShop(const Entity player)
 {
 	auto& buyAreaArray = systemsNC.getComponentArray<Component::BuyArea>();
@@ -478,8 +496,7 @@ void Control::openShop(const Entity player)
 	Component::Velocity& velocity = systemsNC.getComponentArray<Component::Velocity>()->getData(player);
 	const Component::Position playerPos = positionArray->getData(player);
 
-	if (playerAction.state != Enum::PlayerState::IDLE &&
-		playerAction.state != Enum::PlayerState::OPENED_SHOP) return;
+	if (playerAction.state != Enum::PlayerState::IDLE) return;
 
 	bool entered = false;
 
@@ -503,17 +520,15 @@ void Control::openShop(const Entity player)
 	if (!entered) return;
 
 	// toggles it on or off
-	playerController.enabled = !playerController.enabled;
+	playerController.enabled = false;
 
-	playerAction.state = playerController.enabled ?
-		Enum::PlayerState::IDLE : Enum::PlayerState::OPENED_SHOP;
+	playerAction.state = Enum::PlayerState::OPENED_SHOP;
 
 	if (!playerController.enabled)
 	{
 		velocity.x = velocity.x * 0.1;
 		velocity.y = velocity.y * 0.1;
 	}
-
 }
 void Control::openInventory(const Entity player)
 {
@@ -527,8 +542,7 @@ void Control::openInventory(const Entity player)
 	Component::Velocity& velocity = systemsNC.getComponentArray<Component::Velocity>()->getData(player);
 	Component::Inventory& inventory = systemsNC.getComponentArray<Component::Inventory>()->getData(player);
 
-	if (playerAction.state != Enum::PlayerState::IDLE &&
-		playerAction.state != Enum::PlayerState::OPENED_INVENTORY) return;
+	if (playerAction.state != Enum::PlayerState::IDLE) return;
 
 	if (inventory.items.empty())
 	{
@@ -537,11 +551,10 @@ void Control::openInventory(const Entity player)
 	}
 
 	// toggles it on or off
-	playerController.enabled = !playerController.enabled;
+	playerController.enabled = false;
 	// std::cout << "Opened inventory: " << (playerController.enabled ? "True" : "False") << "\n";
 
-	playerAction.state = playerController.enabled ?
-		Enum::PlayerState::IDLE : Enum::PlayerState::OPENED_INVENTORY;
+	playerAction.state = Enum::PlayerState::OPENED_INVENTORY;
 
 	if (!playerController.enabled)
 	{

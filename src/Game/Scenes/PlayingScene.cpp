@@ -362,22 +362,22 @@ void playingScene
 
 	const int UI_BOX_MARGINS = 100;
 
-	Entity shopUIBox = makeUIBox
-	(
-		Enum::Texture::TEXTURE_PLACEHOLDER,
-		sf::Vector2f
-		(
-			0,
-			0
-		),
-		sf::Vector2f
-		(
-			window.getDefaultView().getSize().x - UI_BOX_MARGINS,
-			window.getDefaultView().getSize().y - UI_BOX_MARGINS
-		),
-		sf::Color::White,
-		2
-	);
+	//Entity shopUIBox = makeUIBox
+	//(
+	//	Enum::Texture::TEXTURE_PLACEHOLDER,
+	//	sf::Vector2f
+	//	(
+	//		0,
+	//		0
+	//	),
+	//	sf::Vector2f
+	//	(
+	//		window.getDefaultView().getSize().x - UI_BOX_MARGINS,
+	//		window.getDefaultView().getSize().y - UI_BOX_MARGINS
+	//	),
+	//	sf::Color::White,
+	//	2
+	//);
 
 	// onstart systems
 
@@ -430,8 +430,11 @@ void playingScene
 				if (keyReleased->scancode == sf::Keyboard::Scancode::R)
 				{
 					// the order is important here
-					Control::openShop(player);
-					Control::openInventory(player);
+					if (!Control::idle(player))
+					{
+						Control::openShop(player);
+						Control::openInventory(player);
+					}
 				}
 
 				if (keyReleased->scancode == sf::Keyboard::Scancode::Q)

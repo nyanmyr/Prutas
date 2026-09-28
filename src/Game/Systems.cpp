@@ -11,6 +11,15 @@
 
 NacreCoordinator& systemsNC = NacreCoordinator::getInstance();
 
+static double distance
+(
+	const Component::Position& a,
+	const Component::Position& b
+)
+{
+	return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
+}
+
 // -------------------------------------------------------
 // start systems
 // -------------------------------------------------------
@@ -317,16 +326,12 @@ void Control::pickup(const Entity player)
 
 		const Component::Position itemPos = positionArray->getData(entity);
 
-		double distance = [](Component::Position a, Component::Position b)
-			{
-				return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
-			}
-		(playerPos, itemPos);
+		double dist = distance(playerPos, itemPos);
 
 		//std::cout << "distance: " << distance << "\n";
 		//std::cout << "item.pickupdistance: " << item.pickupDistance << "\n";
 
-		if (distance > item.pickupDistance) continue;
+		if (dist > item.pickupDistance) continue;
 		
 
 		playerInventory.items.push_back(item.type);
@@ -356,16 +361,12 @@ void Control::forage(const Entity player)
 
 		const Component::Position itemPos = positionArray->getData(entity);
 
-		double distance = [](Component::Position a, Component::Position b)
-			{
-				return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
-			}
-		(playerPos, itemPos);
+		double dist = distance(playerPos, itemPos);
 
 		//std::cout << "distance: " << distance << "\n";
 		//std::cout << "item.pickupdistance: " << item.pickupDistance << "\n";
 
-		if (distance > forageSpot.forageDistance) continue;
+		if (dist > forageSpot.forageDistance) continue;
 		
 
 		auto now = std::chrono::steady_clock::now();
@@ -415,16 +416,12 @@ void Control::harvest(const Entity player)
 			plantTimes.seedling > 0.0 ||
 			plantTimes.flowering > 0.0) continue;
 
-		double distance = [](Component::Position a, Component::Position b)
-			{
-				return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
-			}
-		(playerPos, itemPos);
+		double dist = distance(playerPos, itemPos);
 
 		//std::cout << "distance: " << distance << "\n";
 		//std::cout << "item.pickupdistance: " << item.pickupDistance << "\n";
 
-		if (distance > plantHarvest.harvestDistance) continue;
+		if (dist > plantHarvest.harvestDistance) continue;
 
 		auto now = std::chrono::steady_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch());
@@ -514,13 +511,9 @@ void Control::openShop(const Entity player)
 
 		const Component::Position& buyAreaPos = positionArray->getData(entity);
 
-		double distance = [](Component::Position a, Component::Position b)
-			{
-				return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
-			}
-		(playerPos, buyAreaPos);
+		double dist = distance(playerPos, buyAreaPos);
 
-		if (distance > buyArea.distance) continue;
+		if (dist > buyArea.distance) continue;
 		entered = true;
 		break;
 	}
@@ -624,16 +617,12 @@ void Control::sellAllItems
 
 		const Component::Position& sellAreaPos = positionArray->getData(entity);
 
-		double distance = [](Component::Position a, Component::Position b)
-			{
-				return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
-			}
-		(playerPos, sellAreaPos);
+		double dist = distance(playerPos, sellAreaPos);
 
 		//std::cout << "distance: " << distance << "\n";
 		//std::cout << "sellArea.distance: " << sellArea.distance << "\n";
 
-		if (distance > sellArea.distance) continue;
+		if (dist > sellArea.distance) continue;
 
 		// this is where the non-sellable items are moved to
 		std::vector<Enum::Item> newInventory{};

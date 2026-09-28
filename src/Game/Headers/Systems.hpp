@@ -45,7 +45,6 @@ namespace Control
 
 namespace Update
 {
-	void playUIAnimation(DeltaTime dt);
 	void timeCycle
 	(
 		const DeltaTime dt,
@@ -75,7 +74,10 @@ namespace Update
 		const DeltaTime dt,
 		sf::RenderWindow& window
 	);
+
 	void moveUI(const sf::RenderWindow& window);
+	void playUIAnimation(DeltaTime dt);
+
 	void grow
 	(
 		const Entity loadedTextures,

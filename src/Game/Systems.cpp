@@ -862,64 +862,6 @@ void Control::plant(const Entity player)
 // -------------------------------------------------------
 // update systems
 // -------------------------------------------------------
-void Update::playUIAnimation(DeltaTime dt)
-{
-	auto& UIAnimationArray = systemsNC.getComponentArray<Component::UIAnimation>();
-	auto& UIArray = systemsNC.getComponentArray<Component::UI>();
-	auto& spriteArray = systemsNC.getComponentArray<Component::Sprite>();
-	auto& originArray = systemsNC.getComponentArray<Component::Origin>();
-	auto& transformArray = systemsNC.getComponentArray<Component::Transform>();
-
-	for (auto& [entity, uiAnimation] : UIAnimationArray->getAll())
-	{
-		Component::Transform& transform = transformArray->getData(entity);
-		Component::Origin& origin = originArray->getData(entity);
-		Component::Sprite& sprite = spriteArray->getData(entity);
-		const Component::UI& ui = UIArray->getData(entity);
-
-		if (uiAnimation.time <= 0) continue;
-
-		uiAnimation.progress = [](double target, double min, double max)
-			{
-				return (target - min) / (max - min);
-			}
-		(uiAnimation.time, 0.0, uiAnimation.duration);
-
-		//std::cout << "test: " << uiAnimation.progress << "\n";
-
-		// ease out elastic lambda
-		uiAnimation.scalingFactor = [](double progress) -> double
-			{
-				static const double c4 = (2 * std::acos(-1.0)) / 3;
-
-				if (progress <= 0) return 0.0;
-				else if (progress >= 1) return 1.0;
-
-				return std::pow(2.0, -10.0 * progress) *
-					std::sin((progress * 10.0 - 0.75) * c4) + 1.0;
-			}
-		(ui.opened ? uiAnimation.progress : 1.0 - uiAnimation.progress);
-
-		//std::cout << "test: " << uiAnimation.scalingFactor << "\n";
-
-		uiAnimation.time -= dt;
-
-		sprite.body->setScale
-		(
-			sf::Vector2f
-			(
-				uiAnimation.scalingFactor * (transform.width / sprite.body->getTexture().getSize().x),
-				uiAnimation.scalingFactor * (transform.height / sprite.body->getTexture().getSize().y)
-			)
-		);
-
-		origin.set = false;
-
-		//std::cout << "offsetX: " << originObj.offsetX << "\n";
-		//std::cout << "sizeX: " << sprite.body->getGlobalBounds().size.x << "\n";
-		//std::cout << "newOffsetX: " << sprite.body->getGlobalBounds().size.x / 2.0 << "\n";
-	}
-}
 
 const double TIME_SPEED_MULTIPLIER_DEBUG = 2.0;
 
@@ -1301,6 +1243,74 @@ void Update::moveUI(const sf::RenderWindow& window)
 
 		Component::Position& pos = positionArray->getData(entity);
 		pos.x = view.getCenter().x;
+	}
+}
+
+void Update::playUIAnimation(DeltaTime dt)
+{
+	auto& UIAnimationArray = systemsNC.getComponentArray<Component::UIAnimation>();
+	auto& UIArray = systemsNC.getComponentArray<Component::UI>();
+	auto& spriteArray = systemsNC.getComponentArray<Component::Sprite>();
+	auto& originArray = systemsNC.getComponentArray<Component::Origin>();
+	auto& transformArray = systemsNC.getComponentArray<Component::Transform>();
+
+	for (auto& [entity, uiAnimation] : UIAnimationArray->getAll())
+	{
+		Component::Transform& transform = transformArray->getData(entity);
+		Component::Origin& origin = originArray->getData(entity);
+		Component::Sprite& sprite = spriteArray->getData(entity);
+		const Component::UI& ui = UIArray->getData(entity);
+
+		if (uiAnimation.time <= 0) {
+			// resets the scaling when animation is not playing
+			sprite.body->setScale
+			(
+				sf::Vector2f
+				(
+					1.0 * (transform.width / sprite.body->getTexture().getSize().x),
+					1.0 * (transform.height / sprite.body->getTexture().getSize().y)
+				)
+			);
+			continue;
+		}
+
+		uiAnimation.progress = [](double target, double min, double max)
+			{
+				return (target - min) / (max - min);
+			}
+		(uiAnimation.time, 0.0, uiAnimation.duration);
+
+		//std::cout << "test: " << uiAnimation.progress << "\n";
+
+		// ease out elastic lambda
+		uiAnimation.scalingFactor = [](double progress) -> double
+			{
+				static const double c4 = (2 * std::acos(-1.0)) / 3;
+
+				if (progress <= 0) return 0.0;
+				else if (progress >= 1) return 1.0;
+
+				return std::pow(2.0, -10.0 * progress) *
+					std::sin((progress * 10.0 - 0.75) * c4) + 1.0;
+			}
+		(ui.opened ? uiAnimation.progress : 1.0 - uiAnimation.progress);
+
+		//std::cout << "test: " << uiAnimation.scalingFactor << "\n";
+
+		uiAnimation.time -= dt;
+
+		sprite.body->setScale
+		(
+			sf::Vector2f
+			(
+				uiAnimation.scalingFactor * (transform.width / sprite.body->getTexture().getSize().x),
+				uiAnimation.scalingFactor * (transform.height / sprite.body->getTexture().getSize().y)
+			)
+		);
+
+		//std::cout << "offsetX: " << originObj.offsetX << "\n";
+		//std::cout << "sizeX: " << sprite.body->getGlobalBounds().size.x << "\n";
+		//std::cout << "newOffsetX: " << sprite.body->getGlobalBounds().size.x / 2.0 << "\n";
 	}
 }
 

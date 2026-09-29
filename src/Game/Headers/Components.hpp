@@ -75,7 +75,8 @@ namespace Component
 
 	struct UIAnimation
 	{
-		double duration = 0.0;
+		double inDuration = 0.0;
+		double outDuration = 0.0;
 		double time = 0.0;
 		double progress = 0.0;
 		double scalingFactor = 0.0;

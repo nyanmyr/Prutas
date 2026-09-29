@@ -32,7 +32,11 @@ namespace Control
 	void forage(const Entity player);
 	void harvest(const Entity player);
 	bool idle(const Entity player);
-	void openShop(const Entity player);
+	void openShop
+	(
+		const Entity player,
+		const Entity shopUIBox
+	);
 	void openInventory(const Entity player);
 	void inventorySelectLeft(const Entity player);
 	void inventorySelectRight(const Entity player);
@@ -76,6 +80,7 @@ namespace Update
 		sf::RenderWindow& window
 	);
 
+	void showUI();
 	void moveUI(const sf::RenderWindow& window);
 	void playUIAnimation(DeltaTime dt);
 

@@ -471,6 +471,8 @@ static void brake(Component::Velocity& velocity)
 
 bool Control::idle(const Entity player)
 {
+	auto& UIAnimationArray = systemsNC.getComponentArray<Component::UIAnimation>();
+
 	if (!systemsNC.getComponentArray<Component::PlayerController>()->hasData(player) ||
 		!systemsNC.getComponentArray<Component::PlayerAction>()->hasData(player))
 		return false;
@@ -483,10 +485,25 @@ bool Control::idle(const Entity player)
 	playerController.enabled = true;
 	playerAction.state = Enum::PlayerState::IDLE;
 
+	// CLOSES ALL UIs
+	for (auto& [entity, ui] : systemsNC.getComponentArray<Component::UI>()->getAll())
+	{
+		if (!UIAnimationArray->hasData(entity) ||
+			!ui.opened) continue;
+		Component::UIAnimation& uiAnimation = UIAnimationArray->getData(entity);
+
+		ui.opened = false;
+		uiAnimation.time = uiAnimation.outDuration;
+	}
+
 	return true;
 }
 
-void Control::openShop(const Entity player)
+void Control::openShop
+(
+	const Entity player,
+	const Entity shopUIBox
+)
 {
 	auto& buyAreaArray = systemsNC.getComponentArray<Component::BuyArea>();
 	auto& positionArray = systemsNC.getComponentArray<Component::Position>();
@@ -520,10 +537,16 @@ void Control::openShop(const Entity player)
 
 	if (!entered) return;
 
+	Component::UI& ui = systemsNC.getComponentArray<Component::UI>()->getData(shopUIBox);
+	Component::UIAnimation& uiAnimation = systemsNC.getComponentArray<Component::UIAnimation>()->getData(shopUIBox);
+
 	// toggles it on or off
 	playerController.enabled = false;
 
 	playerAction.state = Enum::PlayerState::OPENED_SHOP;
+
+	ui.opened = true;
+	uiAnimation.time = uiAnimation.inDuration;
 
 	brake(velocity);
 }
@@ -1232,6 +1255,30 @@ void Update::followCamera
 	window.setView(view);
 }
 
+void Update::showUI()
+{
+	auto& UIArray = systemsNC.getComponentArray<Component::UI>();
+	auto& UIAnimationArray = systemsNC.getComponentArray<Component::UIAnimation>();
+	auto& zIndexArray = systemsNC.getComponentArray<Component::ZIndex>();
+
+	for (auto& [entity, ui] : UIArray->getAll())
+	{
+		if (!UIAnimationArray->hasData(entity) ||
+			!zIndexArray->hasData(entity)) continue;
+
+		Component::ZIndex& zIndex = zIndexArray->getData(entity);
+		const Component::UIAnimation& uiAnimation = UIAnimationArray->getData(entity);
+
+		if (!ui.opened && uiAnimation.time <= 0.0)
+		{
+			zIndex.visible = false;
+			continue;
+		}
+
+		zIndex.visible = true;
+	}
+}
+
 void Update::moveUI(const sf::RenderWindow& window)
 {
 	auto& UIArray = systemsNC.getComponentArray<Component::UI>();
@@ -1263,7 +1310,8 @@ void Update::playUIAnimation(DeltaTime dt)
 		Component::Sprite& sprite = spriteArray->getData(entity);
 		const Component::UI& ui = UIArray->getData(entity);
 
-		if (uiAnimation.time <= 0) {
+		if (uiAnimation.time <= 0)
+		{
 			// resets the scaling when animation is not playing
 			sprite.body->setScale
 			(
@@ -1280,7 +1328,7 @@ void Update::playUIAnimation(DeltaTime dt)
 			{
 				return (target - min) / (max - min);
 			}
-		(uiAnimation.time, 0.0, uiAnimation.duration);
+		(uiAnimation.time, 0.0, uiAnimation.inDuration);
 
 		//std::cout << "test: " << uiAnimation.progress << "\n";
 
@@ -1295,7 +1343,7 @@ void Update::playUIAnimation(DeltaTime dt)
 				return std::pow(2.0, -10.0 * progress) *
 					std::sin((progress * 10.0 - 0.75) * c4) + 1.0;
 			}
-		(ui.opened ? uiAnimation.progress : 1.0 - uiAnimation.progress);
+		(ui.opened ? 1.0 - uiAnimation.progress : uiAnimation.progress);
 
 		//std::cout << "test: " << uiAnimation.scalingFactor << "\n";
 

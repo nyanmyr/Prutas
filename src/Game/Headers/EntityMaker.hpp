@@ -109,7 +109,8 @@ Entity makeUIBox
 	const sf::Vector2f pos,
 	const sf::Vector2f size,
 	const sf::Color col,
-	const double animationDuration
+	const double animationInDuration,
+	const double animationOutDuration
 );
 
 #endif

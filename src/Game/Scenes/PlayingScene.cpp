@@ -362,22 +362,26 @@ void playingScene
 
 	const int UI_BOX_MARGINS = 100;
 
-	//Entity shopUIBox = makeUIBox
-	//(
-	//	Enum::Texture::TEXTURE_PLACEHOLDER,
-	//	sf::Vector2f
-	//	(
-	//		0,
-	//		0
-	//	),
-	//	sf::Vector2f
-	//	(
-	//		window.getDefaultView().getSize().x - UI_BOX_MARGINS,
-	//		window.getDefaultView().getSize().y - UI_BOX_MARGINS
-	//	),
-	//	sf::Color::White,
-	//	2
-	//);
+	const double ANIMATION_IN_DURATION = 0.8;
+	const double ANIMATION_OUT_DURATION = 0.2;
+
+	Entity shopUIBox = makeUIBox
+	(
+		Enum::Texture::TEXTURE_PLACEHOLDER,
+		sf::Vector2f
+		(
+			0,
+			0
+		),
+		sf::Vector2f
+		(
+			window.getDefaultView().getSize().x - UI_BOX_MARGINS,
+			window.getDefaultView().getSize().y - UI_BOX_MARGINS
+		),
+		sf::Color::White,
+		ANIMATION_IN_DURATION,
+		ANIMATION_OUT_DURATION
+	);
 
 	// onstart systems
 
@@ -432,7 +436,11 @@ void playingScene
 					// the order is important here
 					if (!Control::idle(player))
 					{
-						Control::openShop(player);
+						Control::openShop
+						(
+							player,
+							shopUIBox
+						);
 						Control::openInventory(player);
 					}
 				}
@@ -491,6 +499,7 @@ void playingScene
 			dt,
 			window
 		);
+		Update::showUI();
 		Update::moveUI(window);
 		Update::grow
 		(

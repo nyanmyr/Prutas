@@ -383,6 +383,19 @@ void playingScene
 		ANIMATION_OUT_DURATION
 	);
 
+	Entity TestText = makeUIText
+	(
+		sf::Vector2f
+		(
+			0.f,
+			-250.f
+		),
+		font,
+		"Hello, world!",
+		32,
+		sf::Color::White
+	);
+
 	// onstart systems
 
 	// temporary
@@ -398,8 +411,6 @@ void playingScene
 	while (window.isOpen())
 	{
 		DeltaTime dt = clock.restart().asSeconds();
-
-		Update::playUIAnimation(dt);
 
 		Update::timeCycle
 		(
@@ -499,8 +510,11 @@ void playingScene
 			dt,
 			window
 		);
+
 		Update::showUI();
 		Update::moveUI(window);
+		Update::playUIAnimation(dt);
+
 		Update::grow
 		(
 			loadedTextures,

@@ -1018,3 +1018,66 @@ Entity makeUIBox
 
 	return entity;
 }
+
+Entity makeUIText
+(
+	const sf::Vector2f pos,
+	const sf::Font& font,
+	const std::string str,
+	const int size,
+	const sf::Color col
+)
+{
+	Entity entity = entityMakerNC.createEntity();
+
+	entityMakerNC.addComponent(
+		entity,
+		Component::Position
+		{
+			pos.x,
+			pos.y
+		}
+	);
+
+	sf::Text text(font);
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Text
+		{
+			text,
+			str,
+			size,
+			col,
+			Enum::TextFormat::MIDDLE
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::ZIndex
+		{
+			2,
+			true
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::Transform
+		{
+			0.f,
+			0.f
+		}
+	);
+
+	entityMakerNC.addComponent
+	(
+		entity,
+		Component::UI{}
+	);
+
+	return entity;
+}

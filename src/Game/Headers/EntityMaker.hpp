@@ -113,4 +113,13 @@ Entity makeUIBox
 	const double animationOutDuration
 );
 
+Entity makeUIText
+(
+	const sf::Vector2f pos,
+	const sf::Font& font,
+	const std::string str,
+	const int size,
+	const sf::Color col
+);
+
 #endif

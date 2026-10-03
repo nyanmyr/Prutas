@@ -4,6 +4,7 @@
 #include "Headers/Scenes.hpp"
 
 #include <iostream>
+#include <functional>
 
 using sf::RenderWindow;
 using sf::VideoMode;
@@ -68,6 +69,15 @@ void main()
 
 	nc.registerComponent<Component::SellArea>();
 	nc.registerComponent<Component::BuyArea>();
+
+	// event registration
+	nc.registerEvent<Event::ButtonReleased>();
+
+	// functions creation
+	std::function<void(Event::ButtonReleased)> buttonReleased = Listener::test;
+
+	// listener function linking
+	nc.listen<Event::ButtonReleased>(buttonReleased);
 
 	sf::Font font;
 	if (!font.openFromFile(FONT_FILEPATH))

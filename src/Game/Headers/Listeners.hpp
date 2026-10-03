@@ -1,9 +1,11 @@
 #ifndef LISTENERS_HPP
 #define LISTENERS_HPP
 
-namespace Listeners
-{
+#include "Events.hpp"
 
+namespace Listener
+{
+	void test(Event::ButtonReleased event);
 }
 
 #endif

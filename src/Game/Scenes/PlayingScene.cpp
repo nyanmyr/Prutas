@@ -148,7 +148,7 @@ void playingScene
 			{Enum::Item::CORN_SEED, 1},
 			{Enum::Item::SUNFLOWER_SEED, 2},
 		}
-	);
+		);
 
 	Entity seller = makeSeller
 	(
@@ -193,7 +193,7 @@ void playingScene
 		),
 		50.0
 	);
-	
+
 	// per second
 	const double TIMECYCLE_MINUTES = 60.0;
 	const double TIMECYCLE_HOURS = 12.0; // whole day
@@ -435,6 +435,13 @@ void playingScene
 
 			if (const auto& keyReleased = event->getIf<sf::Event::KeyReleased>())
 			{
+				nc.call<Event::ButtonReleased>
+					(
+						Event::ButtonReleased
+						{
+							keyReleased->scancode
+						}
+					);
 				if (keyReleased->scancode == sf::Keyboard::Scancode::Space)
 				{
 					Control::pickup(player);
@@ -483,8 +490,7 @@ void playingScene
 				// for debugging
 				if (keyReleased->scancode == sf::Keyboard::Scancode::X)
 				{
-					std::cout << "Shillings: " <<
-						nc.getComponentArray<Component::Shillings>()->getData(player).amount << "\n";
+					std::cout << "Shillings: " << nc.getComponentArray<Component::Shillings>()->getData(player).amount << "\n";
 				}
 			}
 		}

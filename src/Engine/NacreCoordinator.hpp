@@ -3,12 +3,14 @@
 
 #include "ComponentManager.hpp"
 #include "EntityManager.hpp"
+#include "EventDispatcher.hpp"
 
 class NacreCoordinator
 {
 private:
 	ComponentManager& cm = ComponentManager::getInstance();
 	EntityManager& em = EntityManager::getInstance();
+	Dispatcher& ds = Dispatcher::getInstance();
 
 	NacreCoordinator() {}
 
@@ -42,7 +44,7 @@ public:
 	template<typename T>
 	T& getComponent(Entity entity)
 	{
-		T& component = cm.getComponent(entity);
+		T& component = cm.getComponent<T>(entity);
 		return component;
 	}
 
@@ -75,6 +77,24 @@ public:
 	{
 		cm.allEntitiesDestroyed();
 		em.destroyAllEntities();
+	}
+
+	template<typename T>
+	void registerEvent()
+	{
+		ds.registerEvent<T>();
+	}
+
+	template<typename T>
+	void listen(std::function<void(T)> event)
+	{
+		ds.listen<T>(event);
+	}
+
+	template<typename T>
+	void call(T event)
+	{
+		ds.call<T>(event);
 	}
 };
 
